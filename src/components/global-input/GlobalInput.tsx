@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 
 interface InputFieldProps {
   label: string;
-  placeholder: string;
   type?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // 입력 값 변경 핸들러
 }
 
 export const GlobalInput = ({
   label,
-  placeholder,
   type = 'text',
   onChange,
 }: InputFieldProps) => {
@@ -38,7 +36,6 @@ export const GlobalInput = ({
       {/* 인풋 */}
       <input
         type={type}
-        placeholder={placeholder}
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
         onChange={onChange} // 입력 변경 핸들러 추가
