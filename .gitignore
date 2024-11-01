@@ -7,10 +7,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories
 node_modules
 dist
 dist-ssr
 *.local
+
+# Environment variables
+.env         # 환경 변수 파일 추가
 
 # Editor directories and files
 .vscode/*
