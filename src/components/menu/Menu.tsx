@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 훅 가져오기
 import AvatarIcon from '@/assets/icons/avatar.svg';
 
 interface MenuPageProps {
@@ -6,6 +7,14 @@ interface MenuPageProps {
 }
 
 const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
+  const navigate = useNavigate();
+
+  // 로그인 페이지로 이동
+  const goToLoginPage = () => {
+    toggleMenu(); // 메뉴 닫기
+    navigate('/login'); // LoginPage로 이동
+  };
+
   return (
     <div
       className='fixed inset-0 bg-white z-50 flex justify-center items-center'
@@ -21,7 +30,6 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
           className='absolute top-2 right-6 w-10 h-10 flex items-center justify-center focus:outline-none' // 클릭 영역 확대
           aria-label='Close menu'
         >
-          {/* X 모양은 버튼 중앙에 작은 크기로 유지 */}
           <div className='relative'>
             <div className='h-[2px] w-6 bg-black rounded-md transform rotate-45 absolute'></div>
             <div className='h-[2px] w-6 bg-black rounded-md transform -rotate-45 absolute'></div>
@@ -29,7 +37,10 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
         </button>
 
         {/* 로그인과 아바타 - 메뉴 항목보다 위에 위치 */}
-        <div className='flex items-center space-x-6 mb-8 mt-10 pl-4'>
+        <div
+          className='flex items-center space-x-6 mb-8 mt-10 pl-4 cursor-pointer'
+          onClick={goToLoginPage} // 로그인 클릭 시 LoginPage로 이동
+        >
           <img src={AvatarIcon} alt='Avatar' className='w-12 h-12' />
           <span className='text-lg font-medium'>로그인</span>
         </div>
