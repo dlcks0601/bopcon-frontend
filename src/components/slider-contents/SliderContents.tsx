@@ -31,7 +31,7 @@ const SliderContents = () => {
   };
 
   return (
-    <div className='slider-container relative w-full h-[50vh] overflow-hidden'>
+    <div className='slider-container relative w-full h-[30vh] overflow-hidden'>
       {sliderData.map((slide, index) => (
         <div
           key={index}
@@ -50,9 +50,9 @@ const SliderContents = () => {
             }}
           ></div>
 
-          {/* 텍스트 레이어 */}
-          <div className='absolute bottom-20 left-10 text-white z-10'>
-            <h2 className='text-5xl font-bold'>{slide.title}</h2>
+          {/* 텍스트 레이어 (반응형) */}
+          <div className='absolute bottom-16 left-8 text-white z-10 text-2xl'>
+            <h2 className='font-bold'>{slide.title}</h2>
           </div>
         </div>
       ))}
