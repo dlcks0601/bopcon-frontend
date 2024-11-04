@@ -1,3 +1,3 @@
-import GlobalListContents from './GlobalListContents';
+import GlobalList from './GlobalList';
 
-export default GlobalListContents;
+export default GlobalList;
