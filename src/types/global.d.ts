@@ -20,3 +20,8 @@ declare module '*.svg' {
   const src: string;
   export default src;
 }
+
+// declarations.d.ts
+declare module '@heroicons/react/outline' {
+  export * from '@heroicons/react';
+}

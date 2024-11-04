@@ -1,4 +1,4 @@
-import GlobalListContents from '@/components/global-list';
+import GlobalListContents from '@/components/global-list-slide';
 import GlobalNavigationBar from '@/components/global-navigation-bar';
 import SliderContents from '@/components/slider-contents';
 
