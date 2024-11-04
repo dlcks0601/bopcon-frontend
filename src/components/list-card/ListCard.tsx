@@ -23,7 +23,7 @@ const ListCard: React.FC<ListCardProps> = ({
   return (
     <div
       onClick={handleCardClick}
-      className='flex flex-col w-full items-start gap-4 px-0 py-[25px] relative bg-white font-sans'
+      className='flex flex-col w-full items-start gap-4 px-0 py-[25px] relative bg-white font-sans cursor-clickable'
     >
       {/* 이미지 컨테이너 */}
       <div className='relative w-[250px] h-[333px]'>

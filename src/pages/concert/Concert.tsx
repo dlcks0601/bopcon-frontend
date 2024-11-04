@@ -1,5 +1,5 @@
 import React from 'react';
-import BackNavigationBar from '@/components/behind-navigation-bar';
+import BackNavigationBar from '@/components/back-navigation-bar';
 import ConcertDetailImg from '@/components/concert-deatail-img';
 import GlobalHeader from '@/components/global-header';
 import ConcertInfo from '@/components/concert-info';

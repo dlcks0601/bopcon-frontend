@@ -30,20 +30,12 @@ export const LoginForm = () => {
 
         {/* 이메일 입력 필드 */}
         <div className='w-full mb-4'>
-          <GlobalInput
-            label='이메일'
-            placeholder='이메일을 입력하세요'
-            type='email'
-          />
+          <GlobalInput label='이메일' type='email' />
         </div>
 
         {/* 비밀번호 입력 필드 */}
         <div className='w-full mb-12'>
-          <GlobalInput
-            label='비밀번호'
-            placeholder='비밀번호를 입력하세요'
-            type='password'
-          />
+          <GlobalInput label='비밀번호' type='password' />
         </div>
 
         {/* 로그인 버튼 */}
