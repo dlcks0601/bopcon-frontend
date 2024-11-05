@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import logo from '@/assets/icons/BOBCONIcon.svg';
 import Search from '@/assets/icons/search.svg';
-import MenuPage from '@/components/menu'; // 전체 화면을 덮는 메뉴 컴포넌트
+import MenuPage from '@/components/menu'; // 전체 화면을 덮는 메뉴 컴포넌트'
+import { Bars3Icon } from '@heroicons/react/24/solid';
 
 const GlobalNavigationBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,11 +22,9 @@ const GlobalNavigationBar = () => {
         {/* 햄버거 메뉴 아이콘 */}
         <button
           onClick={toggleMenu}
-          className='relative w-8 h-8 flex flex-col justify-center items-center space-y-1.5 focus:outline-none'
+          className='relative w-8 h-8 flex justify-center items-center focus:outline-none'
         >
-          <div className='h-[2px] w-6 bg-black rounded-md'></div>
-          <div className='h-[2px] w-6 bg-black rounded-md'></div>
-          <div className='h-[2px] w-6 bg-black rounded-md'></div>
+          <Bars3Icon className='h-8 w-8 text-black' />
         </button>
 
         {/* 전체 화면 덮는 메뉴 페이지 */}

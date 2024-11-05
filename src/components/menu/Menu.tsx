@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 가져오기
 import AvatarIcon from '@/assets/icons/avatar.svg';
+import { XMarkIcon } from '@heroicons/react/24/solid'; // Heroicons XMark 아이콘 가져오기
 
 interface MenuPageProps {
   toggleMenu: () => void;
@@ -27,13 +28,10 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
         {/* X 버튼 */}
         <button
           onClick={toggleMenu}
-          className='absolute top-2 right-6 w-10 h-10 flex items-center justify-center focus:outline-none' // 클릭 영역 확대
+          className='absolute top-2 right-3 w-10 h-10 flex items-center justify-center focus:outline-none' // 클릭 영역 확대
           aria-label='Close menu'
         >
-          <div className='relative'>
-            <div className='h-[2px] w-6 bg-black rounded-md transform rotate-45 absolute'></div>
-            <div className='h-[2px] w-6 bg-black rounded-md transform -rotate-45 absolute'></div>
-          </div>
+          <XMarkIcon className='w-8 h-8 text-black' />
         </button>
 
         {/* 로그인과 아바타 - 메뉴 항목보다 위에 위치 */}
