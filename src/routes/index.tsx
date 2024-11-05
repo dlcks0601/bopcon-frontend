@@ -7,6 +7,13 @@ import JoinPage from '@/pages/join';
 import SetListPage from '@/pages/setlist';
 import PastConcertPage from '@/pages/past-concert';
 import ConcertPage from '@/pages/concert/ConcertPage';
+import AllPage from '@/pages/category/all';
+import NewPage from '@/pages/category/new';
+import JpopPage from '@/pages/category/jpop';
+import RnbPage from '@/pages/category/rnb';
+import RockPage from '@/pages/category/rock';
+import PopPage from '@/pages/category/pop';
+import HiphopPage from '@/pages/category/hiphop';
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +39,34 @@ export const router = createBrowserRouter([
   {
     path: '/past-concerts',
     element: <PastConcertPage />,
+  },
+  {
+    path: '/all',
+    element: <AllPage />,
+  },
+  {
+    path: '/new',
+    element: <NewPage />,
+  },
+  {
+    path: '/rnb',
+    element: <RnbPage />,
+  },
+  {
+    path: '/rock',
+    element: <RockPage />,
+  },
+  {
+    path: '/jpop',
+    element: <JpopPage />,
+  },
+  {
+    path: '/pop',
+    element: <PopPage />,
+  },
+  {
+    path: '/hiphop',
+    element: <HiphopPage />,
   },
 ]);
 
