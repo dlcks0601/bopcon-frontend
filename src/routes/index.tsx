@@ -1,8 +1,12 @@
+// routes/router.ts
+
 import { createBrowserRouter } from 'react-router-dom';
-import MainPage from '../pages/main'; // 경로가 맞는지 확인
+import MainPage from '../pages/main';
 import LoginPage from '@/pages/login';
 import JoinPage from '@/pages/join';
-import Concert from '@/pages/concert';
+import SetListPage from '@/pages/setlist';
+import PastConcertPage from '@/pages/past-concert';
+import ConcertPage from '@/pages/concert/ConcertPage';
 
 export const router = createBrowserRouter([
   {
@@ -10,16 +14,24 @@ export const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
-    path: 'login',
+    path: '/login',
     element: <LoginPage />,
   },
   {
-    path: 'Join',
+    path: '/join',
     element: <JoinPage />,
   },
   {
-    path: 'Concert',
-    element: <Concert />,
+    path: '/concert', // 콘서트 페이지에 id 파라미터 추가
+    element: <ConcertPage />,
+  },
+  {
+    path: '/setlist', // SetList 페이지에 id 파라미터 추가
+    element: <SetListPage />,
+  },
+  {
+    path: '/past-concerts',
+    element: <PastConcertPage />,
   },
 ]);
 

@@ -1,3 +1,3 @@
-import Concert from './Concert';
+import ConcertPage from './ConcertPage';
 
-export default Concert;
+export default ConcertPage;
