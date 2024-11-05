@@ -1,3 +1,7 @@
+// GlobalListContents.tsx
+
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ListCard from '@/components/list-card';
 import sliderCardData from '@/constants/sliderCard';
 
@@ -6,6 +10,12 @@ interface GlobalListContentsProps {
 }
 
 const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
+  const navigate = useNavigate();
+
+  const handleSeeMoreClick = () => {
+    navigate(`/${title.toLowerCase()}`); // 타이틀을 소문자로 변환하여 경로 설정
+  };
+
   return (
     <div className='flex flex-col w-full mx-auto h-auto py-[8px]'>
       {/* 상단 타이틀과 더보기 */}
@@ -16,7 +26,12 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
         >
           {title}
         </div>
-        <div className='font-medium text-[#8c8c8c] text-[15px]'>더보기</div>
+        <div
+          className='font-medium text-[#8c8c8c] text-[15px] cursor-pointer'
+          onClick={handleSeeMoreClick}
+        >
+          더보기
+        </div>
       </div>
 
       {/* 고정 크기의 플레이리스트 카드 목록, 가로 스크롤 가능 */}
