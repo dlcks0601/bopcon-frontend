@@ -1,4 +1,5 @@
 import sampleImg from '@/assets/images/sampleimg1.jpg';
+import { useNavigate } from 'react-router-dom';
 
 interface ListCardProps {
   image: string;
@@ -13,8 +14,17 @@ const ListCard: React.FC<ListCardProps> = ({
   name,
   date,
 }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate('/concert');
+  };
+
   return (
-    <div className='flex flex-col w-full items-start gap-4 px-0 py-[25px] relative bg-white font-sans'>
+    <div
+      onClick={handleCardClick}
+      className='flex flex-col w-full items-start gap-4 px-0 py-[25px] relative bg-white font-sans cursor-clickable'
+    >
       {/* 이미지 컨테이너 */}
       <div className='relative w-[250px] h-[333px]'>
         <img className='w-full h-full object-cover' alt={title} src={image} />

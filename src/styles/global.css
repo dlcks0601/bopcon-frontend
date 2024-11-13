@@ -1,3 +1,11 @@
+/* global.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .cursor-clickable {
+    @apply cursor-pointer;
+  }
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 가져오기
 import AvatarIcon from '@/assets/icons/avatar.svg';
+import { XMarkIcon } from '@heroicons/react/24/solid'; // Heroicons XMark 아이콘 가져오기
 
 interface MenuPageProps {
   toggleMenu: () => void;
@@ -15,6 +16,12 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
     navigate('/login'); // LoginPage로 이동
   };
 
+  // 카테고리 페이지로 이동
+  const goToCategoryPage = (category: string) => {
+    toggleMenu(); // 메뉴 닫기
+    navigate(`/${category.toLowerCase()}`); // 카테고리 페이지로 이동
+  };
+
   return (
     <div
       className='fixed inset-0 bg-white z-50 flex justify-center items-center'
@@ -27,16 +34,13 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
         {/* X 버튼 */}
         <button
           onClick={toggleMenu}
-          className='absolute top-2 right-6 w-10 h-10 flex items-center justify-center focus:outline-none' // 클릭 영역 확대
+          className='absolute top-2 right-3 w-10 h-10 flex items-center justify-center focus:outline-none'
           aria-label='Close menu'
         >
-          <div className='relative'>
-            <div className='h-[2px] w-6 bg-black rounded-md transform rotate-45 absolute'></div>
-            <div className='h-[2px] w-6 bg-black rounded-md transform -rotate-45 absolute'></div>
-          </div>
+          <XMarkIcon className='w-8 h-8 text-black' />
         </button>
 
-        {/* 로그인과 아바타 - 메뉴 항목보다 위에 위치 */}
+        {/* 로그인과 아바타 */}
         <div
           className='flex items-center space-x-6 mb-8 mt-10 pl-4 cursor-pointer'
           onClick={goToLoginPage} // 로그인 클릭 시 LoginPage로 이동
@@ -47,27 +51,48 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
 
         {/* 메뉴 항목 */}
         <nav className='flex flex-col space-y-6 text-2xl font-semibold pl-6'>
-          <a href='#' onClick={toggleMenu} className='block'>
+          <span
+            onClick={() => goToCategoryPage('new')}
+            className='block cursor-pointer'
+          >
             NEW
-          </a>
-          <a href='#' onClick={toggleMenu} className='block'>
+          </span>
+          <span
+            onClick={() => goToCategoryPage('all')}
+            className='block cursor-pointer'
+          >
             ALL
-          </a>
-          <a href='#' onClick={toggleMenu} className='block'>
+          </span>
+          <span
+            onClick={() => goToCategoryPage('pop')}
+            className='block cursor-pointer'
+          >
             POP
-          </a>
-          <a href='#' onClick={toggleMenu} className='block'>
+          </span>
+          <span
+            onClick={() => goToCategoryPage('rock')}
+            className='block cursor-pointer'
+          >
             ROCK
-          </a>
-          <a href='#' onClick={toggleMenu} className='block'>
+          </span>
+          <span
+            onClick={() => goToCategoryPage('hiphop')}
+            className='block cursor-pointer'
+          >
             HIPHOP
-          </a>
-          <a href='#' onClick={toggleMenu} className='block'>
+          </span>
+          <span
+            onClick={() => goToCategoryPage('rnb')}
+            className='block cursor-pointer'
+          >
             R&B
-          </a>
-          <a href='#' onClick={toggleMenu} className='block'>
+          </span>
+          <span
+            onClick={() => goToCategoryPage('jpop')}
+            className='block cursor-pointer'
+          >
             JPOP
-          </a>
+          </span>
         </nav>
 
         {/* 하단 추가 항목 */}

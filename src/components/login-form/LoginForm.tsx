@@ -47,27 +47,28 @@ export const LoginForm = () => {
             <img className='w-[150px] h-[80px] object-contain' src={logo} alt='BOBCON logo' />
           </div>
 
-          {/* 이메일 입력 필드 */}
-          <div className='w-full mb-4'>
-            <GlobalInput
-                label='이메일'
-                placeholder='이메일을 입력하세요'
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+            {/* 이메일 입력 필드 */}
+            <div className='w-full mb-4'>
+                <GlobalInput
+                    label='이메일'
+                    placeholder='이메일을 입력하세요'
+                    type='email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+            </div>
 
-          {/* 비밀번호 입력 필드 */}
-          <div className='w-full mb-12'>
-            <GlobalInput
-                label='비밀번호'
-                placeholder='비밀번호를 입력하세요'
-                type='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            {/* 비밀번호 입력 필드 */}
+            <div className='w-full mb-12'>
+                <GlobalInput
+                    label='비밀번호'
+                    placeholder='비밀번호를 입력하세요'
+                    type='password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+            </div>
+
 
           {/* 로그인 버튼 */}
           <div className='w-full'>
