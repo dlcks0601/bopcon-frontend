@@ -2,6 +2,7 @@ import sampleImg from '@/assets/images/sampleimg1.jpg';
 import { useNavigate } from 'react-router-dom';
 
 interface ListCardProps {
+  concertId: number;
   image: string;
   title: string;
   name: string;
@@ -9,6 +10,7 @@ interface ListCardProps {
 }
 
 const ListCard: React.FC<ListCardProps> = ({
+                                             concertId,
   image = sampleImg,
   title,
   name,
@@ -17,7 +19,7 @@ const ListCard: React.FC<ListCardProps> = ({
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate('/concert');
+    navigate(`/concert/${concertId}`);
   };
 
   return (

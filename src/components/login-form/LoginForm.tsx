@@ -22,7 +22,7 @@ export const LoginForm = () => {
   // 로그인 버튼 클릭 시
   const handleLoginClick = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', {
+      const response = await axios.post('http://localhost:8080/api/auth/login', {
         email: email,
         password: password,
       });

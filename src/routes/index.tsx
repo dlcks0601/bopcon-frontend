@@ -74,6 +74,10 @@ export const router = createBrowserRouter([
     path: '/hiphop',
     element: <HiphopPage />,
   },
+  {
+    path: '/concert/:concertId',
+    element: <ConcertPage />,
+  },
 ]);
 
 export default router;
