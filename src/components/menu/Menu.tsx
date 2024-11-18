@@ -1,7 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 가져오기
+import { useDispatch, useSelector } from 'react-redux'; // Redux useDispatch 훅 가져오기
 import AvatarIcon from '@/assets/icons/avatar.svg';
 import { XMarkIcon } from '@heroicons/react/24/solid'; // Heroicons XMark 아이콘 가져오기
+import { logout } from '@/store/slices/authSlice';
+import { RootState } from '@/store';
 
 interface MenuPageProps {
   toggleMenu: () => void;
@@ -9,6 +12,8 @@ interface MenuPageProps {
 
 const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth); // 로그인 상태 가져오기
 
   // 로그인 페이지로 이동
   const goToLoginPage = () => {
@@ -20,6 +25,13 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
   const goToCategoryPage = (category: string) => {
     toggleMenu(); // 메뉴 닫기
     navigate(`/${category.toLowerCase()}`); // 카테고리 페이지로 이동
+  };
+
+  // 로그아웃 처리
+  const handleLogout = () => {
+    dispatch(logout());
+    toggleMenu();
+    navigate('/');
   };
 
   return (
@@ -46,7 +58,11 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
           onClick={goToLoginPage} // 로그인 클릭 시 LoginPage로 이동
         >
           <img src={AvatarIcon} alt='Avatar' className='w-12 h-12' />
-          <span className='text-lg font-medium'>로그인</span>
+          {isLoggedIn ? (
+            <span className='text-lg font-medium'>{user?.nickname}</span>
+          ) : (
+            <span className='text-lg font-medium'>로그인</span>
+          )}
         </div>
 
         {/* 메뉴 항목 */}
@@ -103,6 +119,11 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
           <a href='#' onClick={toggleMenu} className='block font-semibold'>
             서비스 소개
           </a>
+          {isLoggedIn && (
+            <button onClick={handleLogout} className='block font-semibold'>
+              로그아웃
+            </button>
+          )}
         </div>
       </div>
     </div>
