@@ -33,8 +33,8 @@ const LoginForm = () => {
           password: data.password,
         }
       );
-      const { accessToken, user } = response.data; // API에서 token과 user 데이터 가져오기
-      dispatch(login({ token: accessToken, user })); // Redux 상태 업데이트
+      const { accessToken, nickname } = response.data; // API에서 token과 user 데이터 가져오기
+      dispatch(login({ token: accessToken, nickname: nickname })); // Redux 상태 업데이트
       navigate('/');
     } catch (error) {
       console.error('로그인 실패:', error);

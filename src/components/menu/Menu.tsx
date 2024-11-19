@@ -13,7 +13,9 @@ interface MenuPageProps {
 const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoggedIn, user } = useSelector((state: RootState) => state.auth); // 로그인 상태 가져오기
+  const { isLoggedIn, nickname } = useSelector(
+    (state: RootState) => state.auth
+  ); // 로그인 상태 가져오기
 
   // 로그인 페이지로 이동
   const goToLoginPage = () => {
@@ -36,11 +38,11 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
 
   return (
     <div
-      className='fixed inset-0 bg-white z-50 flex justify-center items-center'
+      className='fixed inset-0 bg-white z-50 flex justify-center items-center '
       onClick={toggleMenu} // 배경 클릭 시 메뉴 닫힘
     >
       <div
-        className='relative w-full max-w-screen-sm bg-white text-black h-full p-4 overflow-y-auto'
+        className='relative w-full max-w-screen-sm bg-white text-black h-full p-4 overflow-y-auto scrollbar-hide'
         onClick={(e) => e.stopPropagation()} // 메뉴 내부 클릭 시 닫히지 않음
       >
         {/* X 버튼 */}
@@ -55,11 +57,16 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
         {/* 로그인과 아바타 */}
         <div
           className='flex items-center space-x-6 mb-8 mt-10 pl-4 cursor-pointer'
-          onClick={goToLoginPage} // 로그인 클릭 시 LoginPage로 이동
+          onClick={isLoggedIn ? undefined : goToLoginPage} // 로그인하지 않은 경우 LoginPage로 이동
         >
           <img src={AvatarIcon} alt='Avatar' className='w-12 h-12' />
           {isLoggedIn ? (
-            <span className='text-lg font-medium'>{user?.nickname}</span>
+            <span
+              className='text-lg font-medium cursor-pointer'
+              onClick={() => navigate('/mypage')} // nickname 클릭 시 MyPage로 이동
+            >
+              {nickname}
+            </span>
           ) : (
             <span className='text-lg font-medium'>로그인</span>
           )}
