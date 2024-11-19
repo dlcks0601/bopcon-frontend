@@ -4,6 +4,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainPage from '../pages/main';
 import LoginPage from '@/pages/login';
 import JoinPage from '@/pages/join';
+
+import ArtistConcertManagement from "@/pages/ArtistConcertManagement/ArtistConcertManagement.tsx";
 import SetListPage from '@/pages/setlist';
 import PastConcertPage from '@/pages/past-concert';
 import ConcertPage from '@/pages/concert/ConcertPage';
@@ -27,6 +29,10 @@ export const router = createBrowserRouter([
   {
     path: '/join',
     element: <JoinPage />,
+  },
+  {
+    path: 'aaa',
+    element: <ArtistConcertManagement/>,
   },
   {
     path: '/concert', // 콘서트 페이지에 id 파라미터 추가
@@ -67,6 +73,10 @@ export const router = createBrowserRouter([
   {
     path: '/hiphop',
     element: <HiphopPage />,
+  },
+  {
+    path: '/concert/:concertId',
+    element: <ConcertPage />,
   },
 ]);
 
