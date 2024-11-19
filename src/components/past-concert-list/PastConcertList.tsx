@@ -1,31 +1,52 @@
-// components/PastConcertList.tsx
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import PastConcertItem from '../past-concert-item';
-import { pastConcertData } from '@/constants/pastConcertData';
+import ConcertListItem from '../concert-list-item/ConcertListItem';
 
-const PastConcertList: React.FC = () => {
+interface PastConcertListProps {
+  mode: 'upcoming' | 'past'; // 내한 공연, 지난 공연 구분
+  data?: Array<{
+    id: number;
+    date: string;
+    location?: string;
+    name?: string;
+    description?: string;
+  }>;
+}
+
+const PastConcertList: React.FC<PastConcertListProps> = ({ mode, data = [] }) => {
   const navigate = useNavigate();
 
   // 클릭 핸들러
-  const handleItemClick = () => {
-    // id 없이 SetListPage로 이동
+  const handlePastItemClick = () => {
     navigate('/setlist');
   };
 
+  const handleUpcomingItemClick = () => {
+    navigate('/concert');
+  };
+
+  // 데이터가 없을 경우 메시지 표시
+  if (data.length === 0) {
+    return (
+      <div className="text-center text-gray-500 py-4">
+        {mode === 'past' ? 'No past concerts available.' : 'No upcoming concerts available.'}
+      </div>
+    );
+  }
+
   return (
-    <div className='w-full'>
-      {pastConcertData.map((concert) => (
+    <div className="w-full">
+      {data.map((item) => (
         <div
-          key={concert.id}
-          onClick={handleItemClick} // 클릭 시 SetListPage로 이동
-          className='cursor-pointer' // 클릭 가능 커서 추가
+          key={item.id}
+          onClick={mode === 'past' ? handlePastItemClick : handleUpcomingItemClick}
+          className="cursor-pointer"
         >
-          <PastConcertItem
-            date={concert.date}
-            location={concert.location}
-            description={concert.description}
+          <ConcertListItem
+            date={item.date}
+            location={mode === 'past' ? item.location : undefined}
+            name={mode === 'upcoming' ? item.name : undefined}
+            description={mode === 'past' ? item.description : undefined}
           />
         </div>
       ))}

@@ -16,6 +16,7 @@ import RnbPage from '@/pages/category/rnb';
 import RockPage from '@/pages/category/rock';
 import PopPage from '@/pages/category/pop';
 import HiphopPage from '@/pages/category/hiphop';
+import ArtistPage from '@/pages/ArtistConcertManagement/ArtistConcertManagement.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
     path: '/concert/:concertId',
     element: <ConcertPage />,
   },
+  {
+    path: '/artist',
+    element : <ArtistPage/>,
+  }
 ]);
 
 export default router;

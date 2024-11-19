@@ -36,6 +36,9 @@ const ConcertPage = () => {
   const goToPastConcertPage = () => {
     navigate('/past-concerts');
   };
+  const goToArtistPage = () => {
+    navigate('/artist');
+  };
 
   return (
     <div className='relative bg-white w-full min-h-screen flex justify-center'>
@@ -56,7 +59,9 @@ const ConcertPage = () => {
           ticketUrl={concertData.ticketUrl || ''}
         />
         <div className='flex justify-around gap-6 mt-6 px-6'>
-          <GlobalButton text='아티스트 정보' variant='black' />
+          <GlobalButton text='아티스트 정보' 
+            variant='black'
+            onClick={goToArtistPage}  />
           <GlobalButton
             text='지난 공연 셋리스트'
             variant='white'

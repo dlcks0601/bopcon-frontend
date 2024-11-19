@@ -1,187 +1,103 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import BackNavigationBar from '@/components/back-navigation-bar';
+import GlobalSingerHeader from '@/components/global-singer-header';
+import GlobalList from '@/components/global-list';
+import SetList from '@/components/set-list';
+import PastConcertList from '@/components/past-concert-list';
+import Select from '@/components/select/Select';
+import WriteList from '@/components/write-list/WriteList';
+import MoreButton from '@/components/more-button/MoreButton';
+import { upcomingConcertData } from '@/constants/upcomingConcertData';
+import { pastConcertData } from '@/constants/pastConcertData';
+import SingleLinks from '@/components/singer-links/SingerLinks';
 
-const ArtistConcertManagement: React.FC = () => {
-    const [artistData, setArtistData] = useState({
-        mbid: '',
-        name: '',
-        imgUrl: '',
-        snsUrl: '',
-        mediaUrl: ''
-    });
-    const [concertData, setConcertData] = useState({
-        artistId: 0,
-        title: '',
-        subTitle: '',
-        date: '',
-        venueName: '',
-        cityName: '',
-        countryName: '',
-        countryCode: '',
-        ticketPlatforms: '',
-        ticketUrl: '',
-        posterUrl: '',
-        genre: '',
-        concertStatus: 'UPCOMING'
-    });
-    const [artists, setArtists] = useState<any[]>([]);
-    const [concerts, setConcerts] = useState<any[]>([]);
-
-    // Handle Artist form input change
-    const handleArtistInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { id, value } = e.target;
-        setArtistData({ ...artistData, [id]: value });
+const ArtistPage = () => {
+  // URL 정보를 정의
+    const artistUrls = {
+    instagramUrl: "",
+    spotifyUrl: "",
     };
 
-    // Handle Concert form input change
-    const handleConcertInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { id, value } = e.target;
-        setConcertData({ ...concertData, [id]: id === 'artistId' ? parseInt(value) : value });
-    };
+  // State for managing "more/less" for each section
+    const [isRankExpanded, setIsRankExpanded] = useState(false);
+    const [isPastConcertExpanded, setIsPastConcertExpanded] = useState(false);
 
-    // Add Artist with JWT token
-    const addArtist = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const accessToken = localStorage.getItem('accessToken'); // 로컬 스토리지에서 accessToken 가져오기
-            if (!accessToken) {
-                alert('로그인이 필요합니다.');
-                return;
-            }
-            const response = await fetch('/api/admin/artist', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}` // Authorization 헤더에 accessToken 추가
-                },
-                body: JSON.stringify(artistData)
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            }
-            const data = await response.json();
-            alert(`Artist Added: ${data.name}`);
-        } catch (error) {
-            console.error("Error adding artist:", error);
-            alert(`Error adding artist: ${error}`);
-        }
-    };
+  // Display counts for each section
+    const displayedRankCount = isRankExpanded ? 7 : 5;
+    const displayedPastConcertCount = isPastConcertExpanded ? 3 : 2;
 
-    // Get All Artists
-    const getAllArtists = async () => {
-        try {
-            const response = await fetch('/api/artists');
-            const data = await response.json();
-            setArtists(data);
-        } catch (error) {
-            console.error("Error fetching artists:", error);
-        }
-    };
-
-    // Add Concert with JWT token
-    const addConcert = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const accessToken = localStorage.getItem('accessToken'); // 로컬 스토리지에서 accessToken 가져오기
-            if (!accessToken) {
-                alert('로그인이 필요합니다.');
-                return;
-            }
-            const response = await fetch('/api/admin/new-concert', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}` // Authorization 헤더에 accessToken 추가
-                },
-                body: JSON.stringify(concertData)
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} - ${response.statusText}`);
-            }
-            const data = await response.json();
-            alert(`Concert Added: ${data.title}`);
-        } catch (error) {
-            console.error("Error adding concert:", error);
-            alert(`Error adding concert: ${error}`);
-        }
-    };
-
-    // Get All Concerts
-    const getAllConcerts = async () => {
-        try {
-            const response = await fetch('/api/new-concerts');
-            const data = await response.json();
-            setConcerts(data);
-        } catch (error) {
-            console.error("Error fetching concerts:", error);
-        }
-    };
+  // Section refs for navigation
+    const rankSectionRef = useRef<HTMLDivElement>(null);
+    const pastConcertSectionRef = useRef<HTMLDivElement>(null);
+    const boardSectionRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div>
-            <h1>Artist and Concert Management</h1>
+        <div className="relative bg-white w-full min-h-screen flex justify-center">
+        <div className="w-full max-w-screen-sm relative">
+        {/* Navigation and header */}
+            <div className="relative top-0 left-0 right-0 z-10 bg-black bg-opacity-50">
+                <BackNavigationBar />
+            </div>
+            {/* Pass artistUrls to SingerDetailImg */}
+                < SingleLinks artistUrls={artistUrls} />
+                <GlobalSingerHeader />
+            {/* Upcoming concerts section */}
+            <div className="w-full mt-4">
+                <GlobalList title="내한 예정" />
+            <div className="flex px-3">
+                <PastConcertList data={upcomingConcertData} mode="upcoming" />
+            </div>
+            </div>
 
-            {/* Artist Management Section */}
-            <section>
-                <h2>Add Artist</h2>
-                <form onSubmit={addArtist}>
-                    <input type="text" id="mbid" placeholder="MBID" required onChange={handleArtistInputChange} />
-                    <input type="text" id="name" placeholder="Name" required onChange={handleArtistInputChange} />
-                    <input type="text" id="imgUrl" placeholder="Image URL" onChange={handleArtistInputChange} />
-                    <input type="text" id="snsUrl" placeholder="SNS URL" onChange={handleArtistInputChange} />
-                    <input type="text" id="mediaUrl" placeholder="Media URL" onChange={handleArtistInputChange} />
-                    <button type="submit">Add Artist</button>
-                </form>
-            </section>
-
-            <section>
-                <h2>All Artists</h2>
-                <button onClick={getAllArtists}>Get All Artists</button>
-                <ul>
-                    {artists.map((artist) => (
-                        <li key={artist.artistId}>
-                            ID: {artist.artistId}, MBID: {artist.mbid}, Name: {artist.name}
-                        </li>
-                    ))}
-                </ul>
-            </section>
-
-            {/* Concert Management Section */}
-            <section>
-                <h2>Add Concert</h2>
-                <form onSubmit={addConcert}>
-                    <input type="number" id="artistId" placeholder="Artist ID" required onChange={handleConcertInputChange} />
-                    <input type="text" id="title" placeholder="Title" required onChange={handleConcertInputChange} />
-                    <input type="text" id="subTitle" placeholder="Sub Title" onChange={handleConcertInputChange} />
-                    <input type="date" id="date" required onChange={handleConcertInputChange} />
-                    <input type="text" id="venueName" placeholder="Venue Name" required onChange={handleConcertInputChange} />
-                    <input type="text" id="cityName" placeholder="City Name" required onChange={handleConcertInputChange} />
-                    <input type="text" id="countryName" placeholder="Country Name" required onChange={handleConcertInputChange} />
-                    <input type="text" id="countryCode" placeholder="Country Code" required onChange={handleConcertInputChange} />
-                    <input type="text" id="ticketPlatforms" placeholder="Ticket Platforms" onChange={handleConcertInputChange} />
-                    <input type="url" id="ticketUrl" placeholder="Ticket URL" onChange={handleConcertInputChange} />
-                    <input type="url" id="posterUrl" placeholder="Poster URL" onChange={handleConcertInputChange} />
-                    <input type="text" id="genre" placeholder="Genre" required onChange={handleConcertInputChange} />
-                    <select id="concertStatus" required onChange={handleConcertInputChange}>
-                        <option value="UPCOMING">UPCOMING</option>
-                        <option value="COMPLETED">COMPLETED</option>
-                    </select>
-                    <button type="submit">Add Concert</button>
-                </form>
-            </section>
-
-            <section>
-                <h2>All Concerts</h2>
-                <button onClick={getAllConcerts}>Get All Concerts</button>
-                <ul>
-                    {concerts.map((concert) => (
-                        <li key={concert.newConcertId}>
-                            Concert ID: {concert.newConcertId}, Artist ID: {concert.artistId}, Title: {concert.title}
-                        </li>
-                    ))}
-                </ul>
-            </section>
+        {/* Tab selection section */}
+        <div className="w-full mt-12">
+            <Select
+            tabs={['곡 랭킹', '지난 공연', '게시판']}
+            sectionRefs={[rankSectionRef, pastConcertSectionRef, boardSectionRef]}
+            />
         </div>
+
+        {/* Rank section */}
+        <div ref={rankSectionRef} className="w-full mt-6">
+            <GlobalList title="곡 랭킹" subtitle="(최근 20개 콘서트 기준)" />
+        <div className="flex px-3">
+            <SetList highlightRanks={true} count={displayedRankCount} />
+        </div>
+        <div>
+            <MoreButton
+                isExpanded={isRankExpanded}
+                onToggle={() => setIsRankExpanded(!isRankExpanded)}
+            />
+            </div>
+            </div>
+
+        {/* Past concerts section */}
+        <div ref={pastConcertSectionRef} className="w-full mt-14">
+            <GlobalList title="지난 공연" />
+        <div className="flex px-3">
+            <PastConcertList
+                data={pastConcertData.slice(0, displayedPastConcertCount)}
+                mode="past"
+            />
+        </div>
+        <div>
+            <MoreButton
+                isExpanded={isPastConcertExpanded}
+                onToggle={() => setIsPastConcertExpanded(!isPastConcertExpanded)}
+            />
+            </div>
+        </div>
+
+        {/* Board section */}
+        <div ref={boardSectionRef} className="w-full mt-14 px-3">
+            <GlobalList title="게시판" rightText="더보기" />
+        <div className="w-full mt-4">
+            <WriteList />
+        </div>
+    </div>
+    </div>
+    </div>
     );
 };
 
-export default ArtistConcertManagement;
+export default ArtistPage;
