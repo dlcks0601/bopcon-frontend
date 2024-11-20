@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchConcertsStart,
+  fetchConcertsSuccess,
+  fetchConcertsFailure,
+  selectConcert,
+} from '@/store/slices/concertSlice';
+import { RootState, AppDispatch } from '@/store';
 import axios from 'axios';
 
 import BackNavigationBar from '@/components/back-navigation-bar';
@@ -13,24 +21,41 @@ import GlobalList from '@/components/global-list';
 const ConcertPage = () => {
   const navigate = useNavigate();
   const { concertId } = useParams<{ concertId: string }>();
-  const [concertData, setConcertData] = useState<any>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { selectedConcert, isLoading, error } = useSelector(
+    (state: RootState) => state.concerts
+  );
 
   useEffect(() => {
     if (concertId) {
-      // concertId가 있을 때만 API 호출
+      dispatch(fetchConcertsStart());
+
       axios
         .get(`/api/new-concerts/${concertId}`)
-        .then((response) => setConcertData(response.data))
-        .catch((error) => console.error('Error fetching concert data:', error));
+        .then((response) => {
+          dispatch(selectConcert(response.data));
+          dispatch(fetchConcertsSuccess([])); // 전체 목록 업데이트 (옵션)
+        })
+        .catch((err) => {
+          dispatch(fetchConcertsFailure(err.message));
+        });
     }
-  }, [concertId]);
+  }, [concertId, dispatch]);
 
-  if (!concertData) {
+  if (isLoading) {
     return (
       <div className='flex items-center justify-center h-screen'>
         <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900'></div>
       </div>
     );
+  }
+
+  if (error) {
+    return <div className='text-red-500'>{error}</div>;
+  }
+
+  if (!selectedConcert) {
+    return <div>콘서트를 찾을 수 없습니다.</div>;
   }
 
   const goToPastConcertPage = () => {
@@ -43,17 +68,17 @@ const ConcertPage = () => {
         <div className='relative top-0 left-0 right-0 z-10 bg-black bg-opacity-50'>
           <BackNavigationBar />
         </div>
-        <ConcertDetailImg posterUrl={concertData.posterUrl || ''} />
+        <ConcertDetailImg posterUrl={selectedConcert.posterUrl || ''} />
         <GlobalConcertHeader
-          title={concertData.title || ''}
-          subTitle={concertData.subTitle || ''}
+          title={selectedConcert.title || ''}
+          subTitle={selectedConcert.subTitle || ''}
         />
         <ConcertInfo
-          date={concertData.date || ''}
-          venueName={concertData.venueName || ''}
-          cityName={concertData.cityName || ''}
-          countryName={concertData.countryName || ''}
-          ticketUrl={concertData.ticketUrl || ''}
+          date={selectedConcert.date || ''}
+          venueName={selectedConcert.venueName || ''}
+          cityName={selectedConcert.cityName || ''}
+          countryName={selectedConcert.countryName || ''}
+          ticketUrl={selectedConcert.ticketUrl || ''}
         />
         <div className='flex justify-around gap-6 mt-6 px-6'>
           <GlobalButton text='아티스트 정보' variant='black' />
