@@ -37,7 +37,7 @@ const GlobalInput = React.forwardRef(
           onBlur={handleInputBlur}
           onChange={onChange}
           {...props}
-          className='w-full h-[70px] px-4 py-2 bg-white rounded-md border-[0.5px] border-solid border-[#000000] text-[#727272] placeholder-transparent focus:outline-none text-xl'
+          className='w-full h-[70px] px-4 pt-2 bg-white rounded-md border-[0.5px] border-solid border-[#000000] text-[#727272] placeholder-transparent focus:outline-none text-xl'
         />
       </div>
     );
