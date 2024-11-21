@@ -5,7 +5,7 @@ import MainPage from '../pages/main';
 import LoginPage from '@/pages/login';
 import JoinPage from '@/pages/join';
 
-import ArtistConcertManagement from "@/pages/ArtistConcertManagement/ArtistConcertManagement.tsx";
+import ArtistConcertManagement from "@/pages/artist/ArtistPage";
 import SetListPage from '@/pages/setlist';
 import PastConcertPage from '@/pages/past-concert';
 import ConcertPage from '@/pages/concert/ConcertPage';
@@ -16,7 +16,7 @@ import RnbPage from '@/pages/category/rnb';
 import RockPage from '@/pages/category/rock';
 import PopPage from '@/pages/category/pop';
 import HiphopPage from '@/pages/category/hiphop';
-import ArtistPage from '@/pages/ArtistConcertManagement/ArtistConcertManagement.tsx';
+import ArtistPage from '@/pages/artist/ArtistPage';
 
 export const router = createBrowserRouter([
   {
@@ -80,7 +80,7 @@ export const router = createBrowserRouter([
     element: <ConcertPage />,
   },
   {
-    path: '/artist',
+    path: '/artist/:artistId',
     element : <ArtistPage/>,
   }
 ]);

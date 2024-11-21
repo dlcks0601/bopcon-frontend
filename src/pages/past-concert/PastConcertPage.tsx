@@ -4,6 +4,7 @@ import SingerDetailImg from '@/components/singer-detail-img/SingerDetailImg';
 import GlobalSingerHeader from '@/components/global-singer-header';
 import GlobalList from '@/components/global-list';
 import PastConcertList from '@/components/past-concert-list';
+import { pastConcertData } from '@/constants/pastConcertData';
 
 const PastConcertPage = () => {
   return (

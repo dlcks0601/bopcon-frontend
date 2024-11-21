@@ -37,7 +37,8 @@ const ConcertPage = () => {
     navigate('/past-concerts');
   };
   const goToArtistPage = () => {
-    navigate('/artist');
+    // concertId를 artistId로 사용하여 ArtistPage로 이동
+    navigate(`/artist/${concertId}`);
   };
 
   return (

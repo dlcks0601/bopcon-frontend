@@ -1,18 +1,14 @@
 import React from 'react';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
-interface ConcertListItemProps {
+interface NowConcertItemProps {
   date: string; // 날짜 정보
-  location?: string; // 공연 장소 (옵션)
   name?: string; // 내한 공연 이름 (옵션)
-  description?: string; // 지난 공연 설명 (옵션)
 }
 
-const ConcertListItem: React.FC<ConcertListItemProps> = ({
+const NowConcertItem: React.FC<NowConcertItemProps> = ({
   date,
-  location,
   name,
-  description,
 }) => {
   const [year, day] = date.split(' ');
 
@@ -26,9 +22,8 @@ const ConcertListItem: React.FC<ConcertListItemProps> = ({
 
       {/* 공연 정보 */}
       <div className="flex-grow">
-        {location && <h3 className="text-md font-medium text-gray-900">{location}</h3>}
-        {name && <p className="text-sm text-gray-600">{name}</p>}
-        {description && <p className="text-sm text-gray-600">{description}</p>}
+        {name && <h3 className="text-md font-medium text-gray-900">{name}</h3>}
+
       </div>
 
       {/* 화살표 */}
@@ -37,4 +32,4 @@ const ConcertListItem: React.FC<ConcertListItemProps> = ({
   );
 };
 
-export default ConcertListItem;
+export default NowConcertItem;
