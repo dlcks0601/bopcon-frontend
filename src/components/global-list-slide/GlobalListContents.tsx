@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ListCard from '@/components/list-card';
+import { Concert } from '@/models/concert.model'; // Concert 타입 임포트
 
 interface GlobalListContentsProps {
   title: string;
@@ -9,7 +10,7 @@ interface GlobalListContentsProps {
 
 const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
   const navigate = useNavigate();
-  const [concerts, setConcerts] = useState([]);
+  const [concerts, setConcerts] = useState<Concert[]>([]);
 
   const handleSeeMoreClick = () => {
     navigate(`/${title.toLowerCase()}`);
@@ -22,7 +23,10 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
       .then((response) => {
         // id 내림차순으로 정렬하고, 상위 3개만 선택
         const latestConcerts = response.data
-          .sort((a, b) => b.newConcertId - a.newConcertId) // 최신순 정렬
+          .sort(
+            (a: { newConcertId: number }, b: { newConcertId: number }) =>
+              b.newConcertId - a.newConcertId
+          ) // 최신순 정렬
           .slice(0, 3);
         // .reverse();
         setConcerts(latestConcerts);

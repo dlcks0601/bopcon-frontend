@@ -1,6 +1,6 @@
 import React from 'react';
 import DetailName from '../detail-name.tsx';
-import Like from '../like/Like.tsx';
+import Like from '../concert-like/ConcertLike.tsx';
 import { singerData } from '@/constants/singerData';
 
 const GlobalSingerHeader: React.FC = () => {

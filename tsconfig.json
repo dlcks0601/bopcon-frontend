@@ -1,4 +1,14 @@
 {
+  "compilerOptions": {
+    "types": ["vitest", "node"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true, // 타입 정의 충돌 무시
+    "moduleResolution": "node",
+    "target": "es6",
+    "module": "esnext",
+    "jsx": "react-jsx"
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

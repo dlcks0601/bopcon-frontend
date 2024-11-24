@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './slices/authSlice';
+import concertFavoritesReducer from '@/store/slices/concertFavoritesSlice';
+import authReducer from '@/store/slices/authSlice';
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer, // auth reducer 추가
+    auth: authReducer,
+    likes: concertFavoritesReducer, // likes로 정의된 상태
   },
 });
 

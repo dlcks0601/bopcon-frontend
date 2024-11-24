@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +8,7 @@ import logo from '@/assets/icons/BOBCONIcon.svg';
 import GlobalInput from '../global-input';
 import axios from 'axios';
 
-interface LoginFormValues {
+export interface LoginFormValues {
   email: string;
   password: string;
 }
@@ -18,29 +18,84 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
+  // 로그인 핸들러
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>();
 
-  const handleLogin = async (data: LoginFormValues) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/api/auth/login',
-        {
-          email: data.email,
-          password: data.password,
-        }
-      );
-      const { accessToken, nickname } = response.data; // API에서 token과 user 데이터 가져오기
-      dispatch(login({ token: accessToken, nickname: nickname })); // Redux 상태 업데이트
+  const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+
+  useEffect(() => {
+    if (isLoggedIn) {
       navigate('/');
+    }
+  }, [isLoggedIn, navigate]);
+
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleLogin = async (data: LoginFormValues) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+        email: data.email,
+        password: data.password,
+      });
+
+      const { accessToken, nickname } = response.data;
+      console.log('로그인 성공:', { accessToken, nickname }); // 성공 로그
+      dispatch(login({ token: accessToken, nickname }));
+      console.log('Redux 상태 업데이트 완료'); // Redux 로그
+
+      // 페이지 이동 지연 로그인 확인 위해서 일부러 했음
+      setTimeout(() => {
+        console.log('페이지 이동');
+        navigate('/');
+      }, 100);
     } catch (error) {
-      console.error('로그인 실패:', error);
-      alert('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인하세요.');
+      if (axios.isAxiosError(error)) {
+        console.error('서버 에러:', error.response?.data || error.message);
+        alert(
+          '로그인 실패: ' + (error.response?.data.message || '서버 문제 발생')
+        );
+      } else {
+        console.error('예상치 못한 에러:', error);
+        alert('로그인 실패: 예상치 못한 문제가 발생했습니다.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // 지연 없는 코드
+  // const handleLogin = async (data: LoginFormValues) => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+  //       email: data.email,
+  //       password: data.password,
+  //     });
+  //     console.log('로그인 응답:', response); // 디버깅용
+  //     const { accessToken, nickname } = response.data;
+  //     console.log('로그인 성공:', { accessToken, nickname }); // 성공 로그
+  //     dispatch(login({ token: accessToken, nickname }));
+  //     navigate('/');
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       console.error('서버 에러:', error.response?.data || error.message);
+  //       alert(
+  //         '로그인 실패: ' + (error.response?.data.message || '서버 문제 발생')
+  //       );
+  //     } else {
+  //       console.error('예상치 못한 에러:', error);
+  //       alert('로그인 실패: 예상치 못한 문제가 발생했습니다.');
+  //     }
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className='bg-white flex flex-col justify-center items-center w-full h-screen'>
