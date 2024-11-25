@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ListCard from '@/components/list-card';
-import { Concert } from '@/models/concert.model'; // Concert 타입 임포트
+import { dummyConcerts } from '@/constants/dummyConcerts';
 
 interface GlobalListContentsProps {
   title: string;
@@ -10,8 +10,7 @@ interface GlobalListContentsProps {
 
 const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
   const navigate = useNavigate();
-  const [concerts, setConcerts] = useState<Concert[]>([]);
-
+  const [concerts, setConcerts] = useState(dummyConcerts); // 초기값으로 더미 데이터 설정
   const handleSeeMoreClick = () => {
     navigate(`/${title.toLowerCase()}`);
   };
@@ -21,18 +20,16 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
     axios
       .get(`/api/new-concerts`)
       .then((response) => {
-        // id 내림차순으로 정렬하고, 상위 3개만 선택
         const latestConcerts = response.data
           .sort(
             (a: { newConcertId: number }, b: { newConcertId: number }) =>
               b.newConcertId - a.newConcertId
           ) // 최신순 정렬
           .slice(0, 3);
-        // .reverse();
-        setConcerts(latestConcerts);
+        setConcerts(latestConcerts); // API 데이터로 대체
       })
       .catch((error) => console.error('Failed to fetch concert data:', error));
-  }, []); // title에 상관없이 API 호출
+  }, []); // API 호출
 
   return (
     <div className='flex flex-col w-full mx-auto h-auto py-[8px]'>
@@ -60,7 +57,7 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
               concertId={concert.newConcertId}
               image={concert.posterUrl}
               title={concert.title}
-              name={concert.artistName}
+              name={concert.krName}
               date={concert.date}
             />
           </div>
