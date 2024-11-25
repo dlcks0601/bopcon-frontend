@@ -13,14 +13,15 @@ const PastConcertItem: React.FC<PastConcertItemProps> = ({
   description,
 }) => {
   // 날짜를 연도와 월-일로 분리
-  const [year, day] = date.split(' ');
+  const [year, month, day] = date.split('-');
 
   return (
     <div className='flex items-center justify-between p-4 py-4'>
       {/* 날짜 표시 */}
-      <div className='flex flex-col items-center justify-center bg-black text-white w-14 h-14 text-center mr-5'>
-        <span className='text-sm font-semibold'>{year}</span>
-        <span className='text-sm font-semibold'>{day}</span>
+      <div className="flex flex-col items-center justify-center bg-black text-white w-16 h-16 text-center mr-5">
+      <span className="text-lg font-bold">{year}</span>
+      <span className="text-sm font-semibold">
+          {month}/{day} </span>
       </div>
 
       {/* 공연 정보 */}

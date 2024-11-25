@@ -3,12 +3,11 @@ import React from 'react';
 interface WriteItemProps {
   title: string; // 제목
   content: string; // 내용
-  detail: string; // 세부 내용
   date: string; // 작성 날짜 및 시간
   nickname: string; // 작성자 닉네임
 }
 
-const WriteItem: React.FC<WriteItemProps> = ({ title, content, detail, date, nickname }) => {
+const WriteItem: React.FC<WriteItemProps> = ({ title, content, date, nickname }) => {
   return (
     <div className="px-7 py-4 bg-white">
       {/* 제목 */}
@@ -16,8 +15,6 @@ const WriteItem: React.FC<WriteItemProps> = ({ title, content, detail, date, nic
       
       {/* 내용 */}
       <p className="text-sm text-gray-700 mt-2">{content}</p>
-      {/* 내용 미리보기 */}
-      <p className="text-sm text-gray-700 mt-2">{detail}</p>
 
       {/* 하단 작성 정보 */}
       <div className="flex justify-end items-center text-gray-500 text-sm mt-3">

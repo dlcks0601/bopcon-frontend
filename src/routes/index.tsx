@@ -5,7 +5,6 @@ import MainPage from '../pages/main';
 import LoginPage from '@/pages/login';
 import JoinPage from '@/pages/join';
 
-import ArtistConcertManagement from "@/pages/artist/ArtistPage";
 import SetListPage from '@/pages/setlist';
 import PastConcertPage from '@/pages/past-concert';
 import ConcertPage from '@/pages/concert/ConcertPage';
@@ -32,19 +31,15 @@ export const router = createBrowserRouter([
     element: <JoinPage />,
   },
   {
-    path: 'aaa',
-    element: <ArtistConcertManagement/>,
-  },
-  {
     path: '/concert', // 콘서트 페이지에 id 파라미터 추가
     element: <ConcertPage />,
   },
   {
-    path: '/setlist', // SetList 페이지에 id 파라미터 추가
+    path: '/setlist/:pastconcertId', // SetList 페이지에 id 파라미터 추가
     element: <SetListPage />,
   },
   {
-    path: '/past-concerts',
+    path: '/past-concerts/:artistId',
     element: <PastConcertPage />,
   },
   {

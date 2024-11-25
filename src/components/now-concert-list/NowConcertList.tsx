@@ -1,87 +1,78 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import NowConcertItem from '../now-concert-item/NowConcertItem';
 
-interface NowConcertListProps {
-  artistId: number; // API 요청에 필요한 artistId
-}
-
 interface ConcertData {
-  id: number;
-  date: string;
-  location?: string;
-  name?: string;
-  description?: string;
+  date: string; // 공연 날짜
+  name: string; // 공연 부제목 (subTitle)
 }
 
-const NowConcertList: React.FC<NowConcertListProps> = ({ artistId }) => {
-  const [data, setData] = useState<ConcertData[]>([]);
+const NowConcertList: React.FC = () => {
+  const [concerts, setConcerts] = useState<ConcertData[]>([]); // 콘서트 데이터 상태
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const { artistId } = useParams<{ artistId: string }>(); // URL에서 artistId 가져오기
+  const navigate = useNavigate(); // useNavigate로 라우팅 기능 추가
 
-  // 데이터 가져오기
   useEffect(() => {
+    if (!artistId) {
+      setError('Artist ID is missing.');
+      setLoading(false);
+      return;
+    }
+
     axios
-      .get(`/api/new-concerts/${artistId}`) // artistId를 경로에 포함
+      .get(`/api/new-concerts/${artistId}`) // API 호출
       .then((response) => {
-        console.log('API response data:', response.data); // 응답 데이터 확인
-        setData(response.data);
-        setLoading(false);
+        console.log('API response data:', response.data); // 데이터 확인
+        const data = response.data;
+
+        // 단일 객체를 배열로 변환
+        if (data && typeof data === 'object') {
+          setConcerts([{
+            date: data.date,
+            name: data.subTitle,
+          }]);
+        } else {
+          console.error('Unexpected data format:', data);
+          setConcerts([]);
+        }
       })
-      .catch((err) => {
-        console.error('Error fetching concerts:', err);
-        setError('Failed to load concerts.');
-        setLoading(false);
-      });
+      .catch((error) => {
+        console.error('Failed to fetch concerts:', error);
+        setError('Failed to load concert data.');
+      })
+      .finally(() => setLoading(false));
   }, [artistId]);
 
-  // 클릭 핸들러
-  const handleItemClick = (id: number) => {
-    navigate(`/concert/${id}`);
+  const handleItemClick = () => {
+    if (artistId) {
+      navigate(`/concert/${artistId}`); // artistId 기반으로 라우팅
+    }
   };
 
-  // 로딩 중 표시
   if (loading) {
-    return (
-      <div className="text-center text-gray-500 py-4">
-        Loading concerts...
-      </div>
-    );
+    return <div className="text-center text-gray-500 py-4">Loading concerts...</div>;
   }
 
-  // 에러 메시지 표시
   if (error) {
-    return (
-      <div className="text-center text-red-500 py-4">
-        {error}
-      </div>
-    );
+    return <div className="text-center text-red-500 py-4">{error}</div>;
   }
 
-  // 데이터가 없을 경우 메시지 표시
-  if (data.length === 0) {
-    return (
-      <div className="text-center text-gray-500 py-4">
-        No concerts available.
-      </div>
-    );
+  if (concerts.length === 0) {
+    return <div className="text-center text-gray-500 py-4">No concerts available.</div>;
   }
 
-  // 데이터 렌더링
   return (
-    <div className="w-full">
-      {data.map((item) => (
+    <div className="w-full space-y-4">
+      {concerts.map((concert, index) => (
         <div
-          key={item.id}
-          onClick={() => handleItemClick(item.id)}
+          key={index}
           className="cursor-pointer"
+          onClick={handleItemClick} // 클릭 이벤트 추가
         >
-          <NowConcertItem
-            date={item.date}
-            name={item.subTitle} // name 포함
-          />
+          <NowConcertItem date={concert.date} name={concert.name} />
         </div>
       ))}
     </div>
