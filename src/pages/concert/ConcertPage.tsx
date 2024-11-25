@@ -7,7 +7,7 @@ import ConcertDetailImg from '@/components/concert-deatail-img';
 import GlobalConcertHeader from '@/components/global-concert-header';
 import ConcertInfo from '@/components/concert-info';
 import GlobalButton from '@/components/global-button';
-import SetList from '@/components/set-list';
+import ExSetlist from '@/components/ex-setlist/ExSetlist';
 import GlobalList from '@/components/global-list';
 
 const ConcertPage = () => {
@@ -34,7 +34,11 @@ const ConcertPage = () => {
   }
 
   const goToPastConcertPage = () => {
-    navigate('/past-concerts');
+    navigate(`/past-concerts/${concertId}`);
+  };
+  const goToArtistPage = () => {
+    // concertId를 artistId로 사용하여 ArtistPage로 이동
+    navigate(`/artist/${concertId}`);
   };
 
   return (
@@ -56,7 +60,9 @@ const ConcertPage = () => {
           ticketUrl={concertData.ticketUrl || ''}
         />
         <div className='flex justify-around gap-6 mt-6 px-6'>
-          <GlobalButton text='아티스트 정보' variant='black' />
+          <GlobalButton text='아티스트 정보' 
+            variant='black'
+            onClick={goToArtistPage}  />
           <GlobalButton
             text='지난 공연 셋리스트'
             variant='white'
@@ -67,7 +73,7 @@ const ConcertPage = () => {
           <GlobalList title='예상 셋리스트' />
         </div>
         <div className='flex px-3'>
-          <SetList />
+        <ExSetlist artistId={concertId || ''} />
         </div>
       </div>
     </div>
