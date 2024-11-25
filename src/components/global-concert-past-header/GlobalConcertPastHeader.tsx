@@ -2,7 +2,7 @@
 
 import React from 'react';
 import DetailName from '../detail-name.tsx';
-import Like from '../like/Like.tsx';
+import Like from '../concert-like/ConcertLike.tsx';
 import { pastConcertData } from '@/constants/pastConcertData.ts';
 
 const GlobalPastConcertHeader: React.FC = () => {

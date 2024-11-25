@@ -9,17 +9,17 @@ import ConcertInfo from '@/components/concert-info';
 import GlobalButton from '@/components/global-button';
 import ExSetlist from '@/components/ex-setlist/ExSetlist';
 import GlobalList from '@/components/global-list';
+import { Concert } from '@/models/concert.model'; // Concert 모델 임포트
 
 const ConcertPage = () => {
   const navigate = useNavigate();
   const { concertId } = useParams<{ concertId: string }>();
-  const [concertData, setConcertData] = useState<any>(null);
+  const [concertData, setConcertData] = useState<Concert | null>(null); // Concert 타입 명시
 
   useEffect(() => {
     if (concertId) {
-      // concertId가 있을 때만 API 호출
       axios
-        .get(`/api/new-concerts/${concertId}`)
+        .get<Concert>(`/api/new-concerts/${concertId}`) // API 요청 후 타입 적용
         .then((response) => setConcertData(response.data))
         .catch((error) => console.error('Error fetching concert data:', error));
     }
@@ -47,17 +47,18 @@ const ConcertPage = () => {
         <div className='relative top-0 left-0 right-0 z-10 bg-black bg-opacity-50'>
           <BackNavigationBar />
         </div>
-        <ConcertDetailImg posterUrl={concertData.posterUrl || ''} />
+        <ConcertDetailImg posterUrl={concertData.posterUrl} />
         <GlobalConcertHeader
-          title={concertData.title || ''}
-          subTitle={concertData.subTitle || ''}
+          title={concertData.title}
+          subTitle={concertData.subTitle}
+          likeId={concertData.newConcertId}
         />
         <ConcertInfo
-          date={concertData.date || ''}
-          venueName={concertData.venueName || ''}
-          cityName={concertData.cityName || ''}
-          countryName={concertData.countryName || ''}
-          ticketUrl={concertData.ticketUrl || ''}
+          date={concertData.date}
+          venueName={concertData.venueName}
+          cityName={concertData.cityName}
+          countryName={concertData.countryName}
+          ticketUrl={concertData.ticketUrl}
         />
         <div className='flex justify-around gap-6 mt-6 px-6'>
           <GlobalButton text='아티스트 정보' 

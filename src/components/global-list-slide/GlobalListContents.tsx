@@ -11,7 +11,6 @@ interface GlobalListContentsProps {
 const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
   const navigate = useNavigate();
   const [concerts, setConcerts] = useState(dummyConcerts); // 초기값으로 더미 데이터 설정
-
   const handleSeeMoreClick = () => {
     navigate(`/${title.toLowerCase()}`);
   };
@@ -22,7 +21,10 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
       .get(`/api/new-concerts`)
       .then((response) => {
         const latestConcerts = response.data
-          .sort((a, b) => b.newConcertId - a.newConcertId) // 최신순 정렬
+          .sort(
+            (a: { newConcertId: number }, b: { newConcertId: number }) =>
+              b.newConcertId - a.newConcertId
+          ) // 최신순 정렬
           .slice(0, 3);
         setConcerts(latestConcerts); // API 데이터로 대체
       })

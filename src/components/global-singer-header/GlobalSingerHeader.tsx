@@ -1,6 +1,7 @@
 import React from 'react';
 import Like from '../like/Like';
 
+
 interface GlobalSingerHeaderProps {
   krName: string; // 아티스트 이름
   engName: string; // 영어 이름
