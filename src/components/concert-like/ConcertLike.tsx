@@ -21,10 +21,10 @@ interface ConcertLikeProps {
 const ConcertLike: React.FC<ConcertLikeProps> = ({ concertId }) => {
   const dispatch = useDispatch();
   const concertFavorites = useSelector(
-    (state: RootState) => state.likes.concertFavorites
+    (state: RootState) => state.concertlikes.concertFavorites
   );
   const token = useSelector((state: RootState) => state.auth.token);
-  const loading = useSelector((state: RootState) => state.likes.loading);
+  const loading = useSelector((state: RootState) => state.concertlikes.loading);
 
   const favorite = concertFavorites.find((fav) => fav.concertId === concertId);
 

@@ -1,3 +1,3 @@
-import Like from './ConcertLike';
+import ConcertLike from './ConcertLike';
 
-export default Like;
+export default ConcertLike;

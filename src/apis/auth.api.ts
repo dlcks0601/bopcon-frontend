@@ -39,20 +39,3 @@ export const login = async (data: JoinProps): Promise<LoginResponse> => {
     throw new Error('로그인 요청에 실패했습니다. 관리자에게 문의하세요.');
   }
 };
-
-// 아티스트 즐겨찾기 추가
-export const addArtistFavorite = async (artistId: number) => {
-  const { data } = await httpClient.post(`/api/favorites/artist/${artistId}`);
-  return data;
-};
-
-// 모든 즐겨찾기 조회
-export const getFavorites = async () => {
-  const { data } = await httpClient.get('/api/favorites');
-  return data;
-};
-// 아티스트 즐겨찾기 삭제
-export const deleteArtistFavorite = async (artistId: number) => {
-  const { data } = await httpClient.delete(`/api/favorites/artist/${artistId}`);
-  return data;
-};
