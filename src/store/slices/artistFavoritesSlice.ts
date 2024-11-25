@@ -6,42 +6,42 @@ interface Favorite {
   concertId: number | null;
 }
 
-interface ConcertFavoritesState {
-  concertFavorites: Favorite[];
+interface ArtistFavoritesState {
+  artistFavorites: Favorite[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: ConcertFavoritesState = {
-  concertFavorites: [],
+const initialState: ArtistFavoritesState = {
+  artistFavorites: [],
   loading: false,
   error: null,
 };
 
-const concertFavoritesSlice = createSlice({
-  name: 'concertFavorites',
+const artistFavoritesSlice = createSlice({
+  name: 'artistFavorites',
   initialState,
   reducers: {
     setFavorites: (state, action: PayloadAction<Favorite[]>) => {
-      state.concertFavorites = action.payload;
+      state.artistFavorites = action.payload;
       state.loading = false;
       state.error = null;
     },
     addFavorite: (state, action: PayloadAction<Favorite>) => {
-      const exists = state.concertFavorites.some(
+      const exists = state.artistFavorites.some(
         (fav) =>
           fav.artistId === action.payload.artistId &&
           fav.concertId === action.payload.concertId
       );
       if (!exists) {
-        state.concertFavorites.push(action.payload);
+        state.artistFavorites.push(action.payload);
       }
     },
     removeFavorite: (
       state,
       action: PayloadAction<{ artistId?: number; concertId?: number }>
     ) => {
-      state.concertFavorites = state.concertFavorites.filter(
+      state.artistFavorites = state.artistFavorites.filter(
         (fav) =>
           !(
             fav.artistId === action.payload.artistId ||
@@ -64,6 +64,6 @@ export const {
   removeFavorite,
   setLoading,
   setError,
-} = concertFavoritesSlice.actions;
+} = artistFavoritesSlice.actions;
 
-export default concertFavoritesSlice.reducer;
+export default artistFavoritesSlice.reducer;
