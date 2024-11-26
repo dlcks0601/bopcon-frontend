@@ -16,6 +16,7 @@ import RockPage from '@/pages/category/rock';
 import PopPage from '@/pages/category/pop';
 import HiphopPage from '@/pages/category/hiphop';
 import ArtistPage from '@/pages/artist/ArtistPage';
+import MyPage from '@/pages/my';
 
 export const router = createBrowserRouter([
   {
@@ -77,7 +78,11 @@ export const router = createBrowserRouter([
   {
     path: '/artist/:artistId',
     element : <ArtistPage/>,
-  }
+  },
+  {
+    path: '/mypage',
+    element : <MyPage/>,
+  },
 ]);
 
 export default router;

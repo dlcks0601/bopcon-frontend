@@ -66,9 +66,9 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
         {songs.map((song) => (
           <li key={song.songId}>
             <SongListItem
-              index={song.order} // order를 index로 매핑
+              index={song.order-1} // order를 index로 매핑
               songName={song.title} // title을 songName으로 매핑
-            />
+              rank={0}            />
           </li>
         ))}
       </ul>

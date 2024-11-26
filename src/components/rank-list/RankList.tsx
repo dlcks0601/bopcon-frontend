@@ -34,11 +34,24 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = false, count, mbid
         const data = response.data;
 
         if (data && typeof data === 'object') {
-          // 객체 데이터 처리
-          const songsArray = Object.entries(data).map(([songName, rank]) => ({
-            songName,
-            rank: rank as number, // rank는 숫자형
-          }));
+          // 데이터를 배열로 변환하고 중복 키 처리
+          const songsArray = Object.entries(data)
+            .map(([songName, rank]) => ({
+              songName,
+              rank: Number(rank) || 0, // 숫자로 변환 (기본값 0)
+            }))
+            .reduce<Song[]>((acc, current) => {
+              const existing = acc.find((song) => song.songName === current.songName);
+              if (existing) {
+                console.warn(
+                  `Duplicate key ${current.songName} (attempted merging values ${existing.rank} and ${current.rank})`
+                );
+                existing.rank = Math.max(existing.rank, current.rank); // 중복 키 병합
+              } else {
+                acc.push(current);
+              }
+              return acc;
+            }, []);
           setSongs(songsArray);
         } else {
           setError('Invalid data format received from server.');
@@ -87,7 +100,7 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = false, count, mbid
       <div className="flex flex-col gap-y-2">
         {songs.slice(0, count).map((song, index) => (
           <SongListItem
-            key={index} // index를 고유 key로 사용
+            key={song.songName} // 곡 이름을 고유 key로 사용
             index={index + 1} // 순서 표시
             songName={song.songName} // 곡 이름 전달
             rank={song.rank} // 랭킹 횟수 전달

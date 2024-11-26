@@ -1,12 +1,11 @@
-import React from 'react';
-
 interface SongListItemProps {
   index: number;
   songName: string;
+  rank: number; // 추가: 랭킹 횟수
   highlight?: boolean; // 색상 표시 여부 (기본값: false)
 }
 
-const SongListItem: React.FC<SongListItemProps> = ({ index, songName, highlight = false }) => {
+const SongListItem: React.FC<SongListItemProps> = ({ index, songName, rank, highlight = false }) => {
   const getColor = (rank: number) => {
     if (!highlight) return ''; // 색상을 표시하지 않음
     if (rank === 1) return 'bg-yellow-300'; // 금색
@@ -18,9 +17,9 @@ const SongListItem: React.FC<SongListItemProps> = ({ index, songName, highlight 
   return (
     <div>
       <div className="flex justify-between items-center px-4 py-2 gap-x-2">
-        {/* Index 부분 */}
+        {/* Rank 부분 */}
         <div
-          className={`text-[#727272] font-medium px-2 py-1 rounded ${getColor(index)}`}
+          className={`text-[#727272] font-medium px-2 py-1 rounded ${getColor(rank)}`}
         >
           {String(index).padStart(2, '0')}
         </div>
