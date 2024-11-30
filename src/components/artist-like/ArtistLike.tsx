@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import {
@@ -10,6 +10,7 @@ import {
 import {
   addArtistFavorite as apiAddArtistFavorite,
   removeArtistFavorite as apiRemoveArtistFavorite,
+  checkArtistFavorite as apicheckArtistFavorite,
 } from '@/apis/favorites.api';
 import { HeartIcon as SolidHeartIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
@@ -20,13 +21,29 @@ interface ArtistLikeProps {
 
 const ArtistLike: React.FC<ArtistLikeProps> = ({ artistId }) => {
   const dispatch = useDispatch();
-  const artistFavorites = useSelector(
-    (state: RootState) => state.artistlikes.artistFavorites
-  );
   const token = useSelector((state: RootState) => state.auth.token);
   const loading = useSelector((state: RootState) => state.artistlikes.loading);
 
-  const favorite = artistFavorites.find((fav) => fav.artistId === artistId);
+  const [favorite, setFavorite] = useState<boolean>(false);
+
+  // 서버에서 즐겨찾기 여부 확인
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchFavoriteStatus = async () => {
+      try {
+        const { favorite } = await apicheckArtistFavorite({
+          artistId,
+          token,
+        });
+        setFavorite(favorite);
+      } catch (error) {
+        console.error('Error checking concert favorite status:', error);
+      }
+    };
+
+    fetchFavoriteStatus();
+  }, [token, artistId]);
 
   const handleLikeToggle = async () => {
     if (!token) {

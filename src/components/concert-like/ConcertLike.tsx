@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import {
@@ -10,6 +10,7 @@ import {
 import {
   addConcertFavorite as apiAddConcertFavorite,
   removeConcertFavorite as apiRemoveConcertFavorite,
+  checkConcertFavorite as apiCheckConcertFavorite,
 } from '@/apis/favorites.api';
 import { HeartIcon as SolidHeartIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
@@ -20,13 +21,29 @@ interface ConcertLikeProps {
 
 const ConcertLike: React.FC<ConcertLikeProps> = ({ concertId }) => {
   const dispatch = useDispatch();
-  const concertFavorites = useSelector(
-    (state: RootState) => state.concertlikes.concertFavorites
-  );
   const token = useSelector((state: RootState) => state.auth.token);
   const loading = useSelector((state: RootState) => state.concertlikes.loading);
 
-  const favorite = concertFavorites.find((fav) => fav.concertId === concertId);
+  const [favorite, setFavorite] = useState<boolean>(false);
+
+  // 서버에서 즐겨찾기 여부 확인
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchFavoriteStatus = async () => {
+      try {
+        const { favorite } = await apiCheckConcertFavorite({
+          concertId,
+          token,
+        });
+        setFavorite(favorite);
+      } catch (error) {
+        console.error('Error checking concert favorite status:', error);
+      }
+    };
+
+    fetchFavoriteStatus();
+  }, [token, concertId]);
 
   const handleLikeToggle = async () => {
     if (!token) {
@@ -38,12 +55,16 @@ const ConcertLike: React.FC<ConcertLikeProps> = ({ concertId }) => {
 
     try {
       if (favorite) {
+        // 즐겨찾기 제거
         await apiRemoveConcertFavorite({ concertId, token });
+        setFavorite(false);
         dispatch(removeFavorite({ concertId }));
       } else {
+        // 즐겨찾기 추가
         await apiAddConcertFavorite({ concertId, token });
+        setFavorite(true);
         const newFavorite = {
-          favoriteId: Math.random(),
+          favoriteId: Math.random(), // 임시 ID
           artistId: null,
           concertId,
         };
