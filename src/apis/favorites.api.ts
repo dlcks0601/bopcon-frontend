@@ -139,3 +139,55 @@ export const getUserFavorites = async ({
     throw new Error('즐겨찾기 조회 요청에 실패했습니다.');
   }
 };
+
+// 아티스트 즐겨찾기 여부 확인
+export const checkArtistFavorite = async ({
+  artistId,
+  token,
+}: {
+  artistId: number;
+  token: string;
+}): Promise<{ favorite: boolean }> => {
+  if (!token) throw new Error('토큰이 없습니다. 로그인이 필요합니다.');
+
+  try {
+    const { data } = await httpClient.get(
+      `/api/favorites/artist/${artistId}/check`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error('Error checking artist favorite:', error);
+    throw new Error('아티스트 즐겨찾기 확인 요청에 실패했습니다.');
+  }
+};
+
+// 콘서트 즐겨찾기 여부 확인
+export const checkConcertFavorite = async ({
+  concertId,
+  token,
+}: {
+  concertId: number;
+  token: string;
+}): Promise<{ favorite: boolean }> => {
+  if (!token) throw new Error('토큰이 없습니다. 로그인이 필요합니다.');
+
+  try {
+    const { data } = await httpClient.get(
+      `/api/favorites/concert/${concertId}/check`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data; // data.favorite 반환
+  } catch (error) {
+    console.error('Error checking concert favorite:', error);
+    throw new Error('콘서트 즐겨찾기 확인 요청에 실패했습니다.');
+  }
+};
