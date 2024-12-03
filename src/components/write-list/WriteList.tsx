@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import WriteItem from '../write-item/WriteItem';
+import ArticleModal from '../article-modal/ArticleModal'; // ArticleModal import
 
 interface ArticleData {
   post_id: number; // Post ID
@@ -18,6 +19,8 @@ const WriteList: React.FC = () => {
   const [articles, setArticles] = useState<ArticleData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<ArticleData | null>(null); // 선택된 게시글 상태
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태
 
   // 날짜 포맷 함수 (예: "2024-11-01T12:30:00Z" -> "2024-11-01 12:30")
   const formatDate = (dateTime: string) => {
@@ -56,6 +59,16 @@ const WriteList: React.FC = () => {
       .finally(() => setLoading(false));
   }, [artistId]);
 
+  const openModal = (article: ArticleData) => {
+    setSelectedArticle(article);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedArticle(null);
+  };
+
   if (loading) {
     return <div className="text-center text-gray-500 py-4">Loading articles...</div>;
   }
@@ -74,14 +87,25 @@ const WriteList: React.FC = () => {
   return (
     <div className="w-full mx-auto bg-white mt-4">
       {articlesToDisplay.map((article) => (
-        <WriteItem
-          key={article.post_id} // post_id를 key로 사용
-          title={article.title} // 글 제목
-          content={article.content} // 글 내용
-          date={formatDate(article.updated_at || article.created_at)} // 날짜 포맷팅
-          nickname={article.userName} // 실제 userName을 사용
-        />
+        <div key={article.post_id} onClick={() => openModal(article)}> {/* 클릭 시 모달 열기 */}
+          <WriteItem
+            title={article.title} // 글 제목
+            content={article.content} // 글 내용
+            date={formatDate(article.updated_at || article.created_at)} // 날짜 포맷팅
+            nickname={article.userName} // 실제 userName을 사용
+          />
+        </div>
       ))}
+
+      {/* 모달 열기 */}
+      {isModalOpen && selectedArticle && (
+        <ArticleModal
+          article={selectedArticle} // 선택된 게시글 정보 전달
+          onClose={closeModal}
+          onEdit={() => {}}
+          onDelete={() => {}}
+        />
+      )}
     </div>
   );
 };

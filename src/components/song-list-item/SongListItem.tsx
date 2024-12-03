@@ -1,11 +1,20 @@
+import MusicIcon from '@/assets/icons/music.svg'
+
 interface SongListItemProps {
   index: number;
   songName: string;
   rank: number; // 추가: 랭킹 횟수
   highlight?: boolean; // 색상 표시 여부 (기본값: false)
+  ytLink?: string; // 추가: YouTube 링크 (선택적)
 }
 
-const SongListItem: React.FC<SongListItemProps> = ({ index, songName, rank, highlight = false }) => {
+const SongListItem: React.FC<SongListItemProps> = ({
+  index,
+  songName,
+  rank,
+  highlight = false,
+  ytLink,
+}) => {
   const getColor = (rank: number) => {
     if (!highlight) return ''; // 색상을 표시하지 않음
     if (rank === 1) return 'bg-yellow-300'; // 금색
@@ -25,6 +34,17 @@ const SongListItem: React.FC<SongListItemProps> = ({ index, songName, rank, high
         </div>
         {/* Song name */}
         <div className="flex-grow pl-2 text-sm">{songName}</div>
+        {/* YouTube 링크 (아이콘으로 표시, 오른쪽 정렬) */}
+        {ytLink && (
+          <a
+            href={ytLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0"
+          >
+            <img src={MusicIcon} alt="Music Icon" className="w-5 h-5" />
+          </a>
+        )}
       </div>
       {/* Separator (highlight가 true일 때만 표시) */}
       {highlight && <hr className="border-t-1 border-gray-400 mt-2 mx-4" />}

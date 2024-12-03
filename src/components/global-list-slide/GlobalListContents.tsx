@@ -11,25 +11,36 @@ interface GlobalListContentsProps {
 const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
   const navigate = useNavigate();
   const [concerts, setConcerts] = useState(dummyConcerts); // 초기값으로 더미 데이터 설정
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const handleSeeMoreClick = () => {
     navigate(`/${title.toLowerCase()}`);
   };
 
   useEffect(() => {
-    // 최신 콘서트 데이터를 가져오는 API 요청
-    axios
-      .get(`/api/new-concerts`)
-      .then((response) => {
+    const fetchConcerts = async () => {
+      try {
+        setLoading(true); // 로딩 상태 시작
+        const endpoint =
+          title === 'NEW' || title === 'ALL'
+            ? '/api/new-concerts'
+            : `/api/new-concerts?genre=${title.toUpperCase()}`; // API 경로 설정
+        const response = await axios.get(endpoint);
         const latestConcerts = response.data
           .sort(
             (a: { newConcertId: number }, b: { newConcertId: number }) =>
               b.newConcertId - a.newConcertId
           ) // 최신순 정렬
-          .slice(0, 3);
+          .slice(0, 10);
         setConcerts(latestConcerts); // API 데이터로 대체
-      })
-      .catch((error) => console.error('Failed to fetch concert data:', error));
-  }, []); // API 호출
+      } catch (error) {
+        console.error('Failed to fetch concert data:', error);
+      } finally {
+        setLoading(false); // 로딩 상태 종료
+      }
+    };
+
+    fetchConcerts();
+  }, [title]); // title 값이 변경될 때마다 호출
 
   return (
     <div className='flex flex-col w-full mx-auto h-auto py-[8px]'>
@@ -49,20 +60,24 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
         </div>
       </div>
 
-      {/* 최신 콘서트 3개의 카드 목록 */}
-      <div className='flex gap-[25px] overflow-x-auto scrollbar-hide mt-[-4px]'>
-        {concerts.map((concert, index) => (
-          <div key={index} className='flex-shrink-0'>
-            <ListCard
-              concertId={concert.newConcertId}
-              image={concert.posterUrl}
-              title={concert.title}
-              name={concert.krName}
-              date={concert.date}
-            />
-          </div>
-        ))}
-      </div>
+      {/* 로딩 상태 처리 */}
+      {loading ? (
+        <div className='text-center text-gray-500'>로딩 중...</div>
+      ) : (
+        <div className='flex gap-[25px] overflow-x-auto scrollbar-hide mt-[-4px]'>
+          {concerts.map((concert, index) => (
+            <div key={index} className='flex-shrink-0'>
+              <ListCard
+                concertId={concert.newConcertId}
+                image={concert.posterUrl}
+                title={concert.title}
+                name={concert.krName}
+                date={concert.date}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

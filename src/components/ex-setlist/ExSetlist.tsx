@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import SongListItem from '../song-list-item'; // SongListItem 컴포넌트
+import SongListItem from '../song-list-item'; // SongListItem 컴포넌트 임포트
 
+// Song 데이터 타입 정의
 interface Song {
   title: string; // 곡 제목
   songId: number; // 곡 ID
@@ -9,8 +10,9 @@ interface Song {
   ytLink: string | null; // 유튜브 링크 (null 가능)
 }
 
+// ExSetlistProps 타입 정의
 interface ExSetlistProps {
-  artistId: string; // 동적으로 전달받는 artistId
+  artistId: number | string; // 동적으로 전달받는 artistId
 }
 
 const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
@@ -19,11 +21,13 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
   const [error, setError] = useState<string | null>(null); // 에러 상태
 
   useEffect(() => {
+    // 예상 셋리스트 데이터 가져오는 함수
     const fetchSetlist = async () => {
       setLoading(true);
+      setError(null); // 이전 에러 상태 초기화
       try {
         const response = await axios.get(`/api/setlists/predict/artist/${artistId}`); // artistId를 사용한 API 호출
-        console.log('Fetched data:', response.data);
+        console.log('Fetched setlist data:', response.data);
 
         if (Array.isArray(response.data)) {
           setSongs(response.data); // 데이터 상태 설정
@@ -44,31 +48,46 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
   }, [artistId]); // artistId 변경 시 다시 호출
 
   if (loading) {
-    return <div>Loading setlist...</div>;
+    return (
+      <div className="flex justify-center items-center h-24">
+        <p>Loading setlist...</p>
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Retry</button>
+      <div className="flex flex-col items-center gap-2">
+        <p className="text-red-500">{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+        >
+          Retry
+        </button>
       </div>
     );
   }
 
   if (songs.length === 0) {
-    return <div>No setlist available.</div>;
+    return (
+      <div className="text-center text-gray-500">
+        <p>No setlist available.</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <ul>
-        {songs.map((song) => (
+    <div className="px-4">
+      <ul className="space-y-4">
+        {songs.map((song, index) => (
           <li key={song.songId}>
             <SongListItem
-              index={song.order-1} // order를 index로 매핑
-              songName={song.title} // title을 songName으로 매핑
-              rank={0}            />
+              index={index+1} // 순서를 index로 표시
+              songName={song.title} // 곡 제목
+              rank={0} // 기본 rank 값 (서버에서 제공되지 않을 경우 사용)
+              ytLink={song.ytLink || undefined} // 유튜브 링크 (null일 경우 undefined로 처리)
+            />
           </li>
         ))}
       </ul>

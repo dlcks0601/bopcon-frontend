@@ -13,7 +13,7 @@ interface RankListProps {
   mbid: string; // 아티스트 ID
 }
 
-const RankList: React.FC<RankListProps> = ({ highlightRanks = false, count, mbid }) => {
+const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, mbid }) => {
   const [songs, setSongs] = useState<Song[]>([]); // 랭크 리스트 데이터 상태
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
@@ -34,24 +34,11 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = false, count, mbid
         const data = response.data;
 
         if (data && typeof data === 'object') {
-          // 데이터를 배열로 변환하고 중복 키 처리
-          const songsArray = Object.entries(data)
-            .map(([songName, rank]) => ({
-              songName,
-              rank: Number(rank) || 0, // 숫자로 변환 (기본값 0)
-            }))
-            .reduce<Song[]>((acc, current) => {
-              const existing = acc.find((song) => song.songName === current.songName);
-              if (existing) {
-                console.warn(
-                  `Duplicate key ${current.songName} (attempted merging values ${existing.rank} and ${current.rank})`
-                );
-                existing.rank = Math.max(existing.rank, current.rank); // 중복 키 병합
-              } else {
-                acc.push(current);
-              }
-              return acc;
-            }, []);
+          // 데이터를 배열로 변환
+          const songsArray = Object.entries(data).map(([songName, rank]) => ({
+            songName,
+            rank: Number(rank) || 0, // 숫자로 변환 (기본값 0)
+          }));
           setSongs(songsArray);
         } else {
           setError('Invalid data format received from server.');
@@ -103,7 +90,7 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = false, count, mbid
             key={song.songName} // 곡 이름을 고유 key로 사용
             index={index + 1} // 순서 표시
             songName={song.songName} // 곡 이름 전달
-            rank={song.rank} // 랭킹 횟수 전달
+            rank={index + 1} // 순위 전달
             highlight={highlightRanks} // highlightRanks 전달
           />
         ))}

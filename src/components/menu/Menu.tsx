@@ -29,6 +29,8 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
     navigate(`/${category.toLowerCase()}`); // 카테고리 페이지로 이동
   };
 
+  
+
   // 로그아웃 처리
   const handleLogout = () => {
     dispatch(logout());
@@ -116,6 +118,7 @@ const MenuPage: React.FC<MenuPageProps> = ({ toggleMenu }) => {
           >
             JPOP
           </span>
+          
         </nav>
 
         {/* 하단 추가 항목 */}

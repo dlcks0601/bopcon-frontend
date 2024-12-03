@@ -49,7 +49,8 @@ const SetList: React.FC<SetListProps> = ({ onArtistIdChange }) => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
-  if (songs.length === 0) return <div>No songs available</div>;
+  if (songs.length === 0) return  <div style={{ textAlign: 'center', padding: '170px' }}>
+                 예상 셋리스트가 준비되어있지 않습니다.<br />죄송합니다.</div>;
 
   return (
     <ul>

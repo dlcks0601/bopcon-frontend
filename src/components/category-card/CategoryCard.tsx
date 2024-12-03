@@ -2,6 +2,7 @@ import sampleImg from '@/assets/images/sampleimg1.jpg';
 import { useNavigate } from 'react-router-dom';
 
 interface ListCardProps {
+  concertId: number; // 추가된 concertId
   image: string;
   title: string;
   name: string;
@@ -9,6 +10,7 @@ interface ListCardProps {
 }
 
 const ListCard: React.FC<ListCardProps> = ({
+  concertId, // concertId 추가
   image = sampleImg,
   title,
   name,
@@ -17,7 +19,7 @@ const ListCard: React.FC<ListCardProps> = ({
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate('/concert');
+    navigate(`/concert/${concertId}`); // concertId를 포함한 URL로 이동
   };
 
   return (
@@ -27,7 +29,6 @@ const ListCard: React.FC<ListCardProps> = ({
     >
       {/* 이미지 컨테이너 */}
       <div className='relative w-full h-0 pb-[133%]'>
-        {' '}
         {/* 3:4 비율을 유지하는 방법 */}
         <img
           className='absolute inset-0 w-full h-full object-cover'

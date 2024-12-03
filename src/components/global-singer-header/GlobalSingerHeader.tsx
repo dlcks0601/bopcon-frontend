@@ -18,7 +18,7 @@ const GlobalSingerHeader: React.FC<GlobalSingerHeaderProps> = ({
         <h1 className='text-xl font-bold'>{krName}</h1>
         <h2 className='text-sm text-gray-500'>{engName}</h2>
       </div>
-      <ArtistLike artistId={likeId} />
+      {likeId !== undefined && <ArtistLike artistId={likeId} />}
     </div>
   );
 };

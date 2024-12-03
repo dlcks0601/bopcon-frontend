@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BackNavigationBar from '@/components/back-navigation-bar';
 import GlobalSingerHeader from '@/components/global-singer-header';
@@ -11,10 +11,12 @@ import WriteList from '@/components/write-list/WriteList';
 import MoreButton from '@/components/more-button/MoreButton';
 import SingerLinks from '@/components/singer-links/SingerLinks';
 import NowConcertList from '@/components/now-concert-list/NowConcertList';
+import BoardPage from '../board';
 
 const ArtistPage: React.FC = () => {
-  const [artistData, setArtistData] = useState<any>(null);
   const { artistId } = useParams<{ artistId: string }>();
+  const navigate = useNavigate(); // 페이지 이동을 위한 hook
+  const [artistData, setArtistData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isRankExpanded, setIsRankExpanded] = useState(false);
   const [isPastConcertExpanded, setIsPastConcertExpanded] = useState(false);
@@ -37,24 +39,24 @@ const ArtistPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center h-screen'>
-        <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900'></div>
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   if (!artistData) {
     return (
-      <div className='flex items-center justify-center h-screen'>
+      <div className="flex items-center justify-center h-screen">
         <p>아티스트 데이터를 불러올 수 없습니다.</p>
       </div>
     );
   }
 
   return (
-    <div className='relative bg-white w-full min-h-screen flex justify-center'>
-      <div className='w-full max-w-screen-sm'>
-        <div className='sticky top-0 z-10 bg-black bg-opacity-50'>
+    <div className="relative bg-white w-full min-h-screen flex justify-center">
+      <div className="w-full max-w-screen-sm">
+        <div className="sticky top-0 z-10 bg-black bg-opacity-50">
           <BackNavigationBar />
         </div>
         <SingerLinks
@@ -69,13 +71,13 @@ const ArtistPage: React.FC = () => {
           engName={artistData.krName}
           likeId={artistData.artistId}
         />
-        <section className='w-full mt-4'>
-          <GlobalList title='내한 예정' />
-          <div className='flex px-3'>
+        <section className="w-full mt-4">
+          <GlobalList title="내한 예정" />
+          <div className="flex px-3">
             <NowConcertList />
           </div>
         </section>
-        <section className='w-full mt-12'>
+        <section className="w-full mt-12">
           <Select
             tabs={['곡 랭킹', '지난 공연', '게시판']}
             sectionRefs={[
@@ -85,9 +87,9 @@ const ArtistPage: React.FC = () => {
             ]}
           />
         </section>
-        <section ref={rankSectionRef} className='w-full mt-6'>
-          <GlobalList title='곡 랭킹' subtitle='(최근 20개 콘서트 기준)' />
-          <div className='flex px-3'>
+        <section ref={rankSectionRef} className="w-full mt-6">
+          <GlobalList title="곡 랭킹" subtitle="(최근 20개 콘서트 기준)" />
+          <div className="flex px-3">
             <RankList
               highlightRanks={true}
               count={displayedRankCount}
@@ -99,10 +101,9 @@ const ArtistPage: React.FC = () => {
             onToggle={() => setIsRankExpanded(!isRankExpanded)}
           />
         </section>
-        <section ref={pastConcertSectionRef} className='w-full mt-14'>
-          <GlobalList title='지난 공연' />
-          <div className='flex px-3'>
-            {/* 여기서 artistName 사용 */}
+        <section ref={pastConcertSectionRef} className="w-full mt-14">
+          <GlobalList title="지난 공연" />
+          <div className="flex px-3">
             <PastConcertList
               artistName={artistData.name}
               isExpanded={isPastConcertExpanded}
@@ -113,9 +114,14 @@ const ArtistPage: React.FC = () => {
             onToggle={() => setIsPastConcertExpanded(!isPastConcertExpanded)}
           />
         </section>
-        <section ref={boardSectionRef} className='w-full mt-14 '>
-          <GlobalList title='게시판' rightText='더보기' />
-          <div className='w-full mt-4'>
+        <section ref={boardSectionRef} className="w-full mt-14">
+          {/* 게시판 섹션에 '더보기' 버튼 추가 */}
+          <GlobalList
+              title="게시판"
+              rightText="더보기"
+              artistId={artistId} // artistId 전달
+             />
+          <div className="w-full mt-4">
             <WriteList />
           </div>
         </section>
