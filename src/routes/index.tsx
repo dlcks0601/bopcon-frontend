@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
     element: <ConcertPage />,
   },
   {
-    path: '/setlist/:pastconcertId', // SetList 페이지에 id 파라미터 추가
+    path: '/artist/:artistId/setlist/:pastConcertId', // SetList 페이지에 id 파라미터 추가
     element: <SetListPage />,
   },
   {

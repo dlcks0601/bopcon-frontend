@@ -11,7 +11,6 @@ import WriteList from '@/components/write-list/WriteList';
 import MoreButton from '@/components/more-button/MoreButton';
 import SingerLinks from '@/components/singer-links/SingerLinks';
 import NowConcertList from '@/components/now-concert-list/NowConcertList';
-import BoardPage from '../board';
 
 const ArtistPage: React.FC = () => {
   const { artistId } = useParams<{ artistId: string }>();
@@ -21,7 +20,7 @@ const ArtistPage: React.FC = () => {
   const [isRankExpanded, setIsRankExpanded] = useState(false);
   const [isPastConcertExpanded, setIsPastConcertExpanded] = useState(false);
 
-  const displayedRankCount = isRankExpanded ? 20 : 5;
+  const displayedRankCount = isRankExpanded ? 30: 5;
   const rankSectionRef = useRef<HTMLDivElement>(null);
   const pastConcertSectionRef = useRef<HTMLDivElement>(null);
   const boardSectionRef = useRef<HTMLDivElement>(null);
@@ -93,7 +92,7 @@ const ArtistPage: React.FC = () => {
             <RankList
               highlightRanks={true}
               count={displayedRankCount}
-              mbid={artistData.mbid}
+              artistId={artistId}
             />
           </div>
           <MoreButton
@@ -105,7 +104,7 @@ const ArtistPage: React.FC = () => {
           <GlobalList title="지난 공연" />
           <div className="flex px-3">
             <PastConcertList
-              artistName={artistData.name}
+              artistId={artistId}
               isExpanded={isPastConcertExpanded}
             />
           </div>

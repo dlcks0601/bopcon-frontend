@@ -91,45 +91,45 @@ const BoardPage: React.FC = () => {
   };
 
   // 게시글 작성
-  const handleCreateSubmit = async (
-    title: string,
-    content: string,
-    categoryType: 'FREE_BOARD' | 'NEW_CONCERT',
-    artistId: number | null,
-    newConcertId: number | null
-  ) => {
-    if (!token) {
-      alert('로그인이 필요합니다.');
-      return;
-    }
+const handleCreateSubmit = async (
+  title: string,
+  content: string,
+  categoryType: 'FREE_BOARD' | 'NEW_CONCERT',
+  artistId: number | null,
+  newConcertId: number | null
+) => {
+  if (!token) {
+    alert('로그인이 필요합니다.');
+    return;
+  }
 
-    console.log('Creating article with data:', {
-      title,
-      content,
-      categoryType,
-      artistId,
-      newConcertId,
-    });
+  console.log('Creating article with data:', {
+    title,
+    content,
+    categoryType,
+    artistId,
+    newConcertId,
+  });
 
-    try {
-      await createArticle(
-        {
-          title,
-          content,
-          categoryType,
-          artistId: artistId ?? 0,
-          newConcertId: newConcertId ?? 0,
-          userId: 36,
-        },
-        token
-      );
-      setIsCreating(false);
-      alert('게시글 작성 완료');
-    } catch (error) {
-      console.error('게시글 작성 실패:', error);
-      alert('게시글 작성에 실패했습니다.');
-    }
-  };
+  try {
+    await createArticle(
+      {
+        title,
+        content,
+        categoryType,
+        artistId: artistId ?? 0,
+        newConcertId: newConcertId ?? 0,
+      },
+      token
+    );
+    setIsCreating(false);
+    alert('게시글 작성 완료');
+  } catch (error) {
+    console.error('게시글 작성 실패:', error);
+    alert('게시글 작성에 실패했습니다.');
+  }
+};
+
 
   // 게시글 수정
   const handleEditSubmit = async (
@@ -195,6 +195,7 @@ const BoardPage: React.FC = () => {
           {isCreating ? (
             <ArticleForm
               mode="create"
+              fixedArtistId={parseInt(artistId || '0', 10)} // artistId 전달
               onSubmit={handleCreateSubmit}
               onCancel={() => setIsCreating(false)}
             />
@@ -204,11 +205,11 @@ const BoardPage: React.FC = () => {
               initialTitle={selectedArticle.title}
               initialContent={selectedArticle.content}
               initialCategoryType={selectedArticle.categoryType}
-              initialArtistId={selectedArticle.artist?.id || null}
+              fixedArtistId={parseInt(artistId || '0', 10)} // artistId 전달
               initialNewConcertId={selectedArticle.newConcert?.id || null}
               onSubmit={(title, content, categoryType, artistId, newConcertId) =>
-                handleEditSubmit(selectedArticle.id, title, content, categoryType, artistId, newConcertId)
-              }
+              handleEditSubmit(selectedArticle.id, title, content, categoryType, artistId, newConcertId)
+            }
               onCancel={() => setIsEditing(false)}
             />
           ) : (

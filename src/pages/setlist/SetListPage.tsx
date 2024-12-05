@@ -8,10 +8,9 @@ import GlobalSingerHeader from '@/components/global-singer-header';
 import axios from 'axios';
 
 const SetListPage = () => {
-  const { pastconcertId } = useParams<{ pastconcertId: string }>();
+  const { artistId } = useParams<{ artistId: string }>();
 
   // 상태 관리
-  const [artistId, setArtistId] = useState<number | null>(null);
   const [artistData, setArtistData] = useState<{
     imgUrl: string;
   } | null>(null);
@@ -20,43 +19,31 @@ const SetListPage = () => {
     cityName: string;
   } | null>(null);
 
-  // pastconcertId를 사용해 concertData 가져오기
-  useEffect(() => {
-    if (pastconcertId) {
-      axios
-        .get(`/api/past-concerts/${pastconcertId}`)
-        .then((response) => {
-          setConcertData({
-            venueName: response.data.venueName,
-            cityName: response.data.cityName,
-          });
-        })
-        .catch((error) => {
-          console.error('Error fetching past concert data:', error);
-        });
-    }
-  }, [pastconcertId]);
-
-  // artistId가 변경되면 artistData 가져오기
+  // artistId를 사용해 concertData 가져오기
   useEffect(() => {
     if (artistId) {
       axios
-        .get(`/api/artists/${artistId}`)
+        .get(`/api/artists/${artistId}/past-concerts`) // 엔드포인트 변경
         .then((response) => {
+          const concert = response.data; // API 응답에서 적절한 필드로 수정
+          setConcertData({
+            venueName: concert.venueName,
+            cityName: concert.cityName,
+          });
           setArtistData({
-            imgUrl: response.data.imgUrl,
+            imgUrl: concert.imgUrl,
           });
         })
         .catch((error) => {
-          console.error('Error fetching artist data:', error);
+          console.error('Error fetching past concerts data:', error); // 에러 메시지 변경
         });
     }
   }, [artistId]);
 
-  if (!pastconcertId) {
+  if (!artistId) {
     return (
       <div className="text-center text-red-500 py-4">
-        Past concert ID is missing.
+        Artist ID is missing.
       </div>
     );
   }
@@ -84,7 +71,7 @@ const SetListPage = () => {
           <GlobalList title="셋리스트" />
         </div>
         <div className="flex px-4">
-          <SetList onArtistIdChange={setArtistId} />
+          <SetList artistId={artistId}/>
         </div>
       </div>
     </div>

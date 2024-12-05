@@ -2,7 +2,7 @@ import React from 'react';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 
 interface PastConcertItemProps {
-  date: string;
+  date: number[]; // [year, month, day] 형식
   location: string;
   description: string;
 }
@@ -12,16 +12,17 @@ const PastConcertItem: React.FC<PastConcertItemProps> = ({
   location,
   description,
 }) => {
-  // 날짜를 연도와 월-일로 분리
-  const [year, month, day] = date.split('-');
+  // 날짜를 배열에서 분리
+  const [year, month, day] = date;
 
   return (
     <div className='flex items-center justify-between p-4 py-4'>
       {/* 날짜 표시 */}
       <div className="flex flex-col items-center justify-center bg-black text-white w-16 h-16 text-center mr-5">
-      <span className="text-lg font-bold">{year}</span>
-      <span className="text-sm font-semibold">
-          {month}/{day} </span>
+        <span className="text-lg font-bold">{year}</span>
+        <span className="text-sm font-semibold">
+          {String(month).padStart(2, '0')}/{String(day).padStart(2, '0')}
+        </span>
       </div>
 
       {/* 공연 정보 */}

@@ -46,7 +46,6 @@ export const createArticle = async (
     content: string;
     categoryType: 'FREE_BOARD' | 'NEW_CONCERT';
     artistId: number | null;
-    userId: number; // 사용자 ID
     newConcertId: number | null;
   },
   token: string
@@ -63,6 +62,7 @@ export const createArticle = async (
     throw new Error('Failed to create article');
   }
 };
+
 
 /**
  * 게시글 수정

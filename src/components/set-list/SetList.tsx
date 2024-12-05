@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SongListItem from '../song-list-item';
 
@@ -9,18 +8,17 @@ interface Song {
 }
 
 interface SetListProps {
-  onArtistIdChange: (artistId: number) => void; // artistId를 상위로 전달
+  artistId: number; // 상위 컴포넌트에서 artistId를 전달받음
 }
 
-const SetList: React.FC<SetListProps> = ({ onArtistIdChange }) => {
-  const { pastconcertId } = useParams<{ pastconcertId: string }>();
+const SetList: React.FC<SetListProps> = ({ artistId }) => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!pastconcertId) {
-      setError('Past Concert ID is missing.');
+    if (!artistId) {
+      setError('Artist ID is missing.');
       setLoading(false);
       return;
     }
@@ -28,15 +26,10 @@ const SetList: React.FC<SetListProps> = ({ onArtistIdChange }) => {
     setLoading(true);
 
     axios
-      .get(`/api/setlists/past-concert/${pastconcertId}`)
+      .get(`/api/artists/${artistId}/past-setlists`) // 수정된 엔드포인트 사용
       .then((response) => {
         if (response.data && Array.isArray(response.data.setlist)) {
           setSongs(response.data.setlist);
-
-          // artistId 추출 및 전달
-          if (response.data.artistId) {
-            onArtistIdChange(response.data.artistId);
-          }
         } else {
           setError('Invalid data format received from server.');
         }
@@ -45,12 +38,18 @@ const SetList: React.FC<SetListProps> = ({ onArtistIdChange }) => {
         setError('Failed to load setlist.');
       })
       .finally(() => setLoading(false));
-  }, [pastconcertId]);
+  }, [artistId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
-  if (songs.length === 0) return  <div style={{ textAlign: 'center', padding: '170px' }}>
-                 예상 셋리스트가 준비되어있지 않습니다.<br />죄송합니다.</div>;
+  if (songs.length === 0)
+    return (
+      <div style={{ textAlign: 'center', padding: '170px' }}>
+        예상 셋리스트가 준비되어있지 않습니다.
+        <br />
+        죄송합니다.
+      </div>
+    );
 
   return (
     <ul>

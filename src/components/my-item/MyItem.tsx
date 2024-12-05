@@ -2,15 +2,19 @@ import React from 'react';
 
 interface MyItemProps {
   name: string;
-  number: number; // number 데이터를 추가로 받음
+  imgurl: string; // imgurl 데이터를 추가로 받음
 }
 
-const MyItem: React.FC<MyItemProps> = ({ name, number }) => {
+const MyItem: React.FC<MyItemProps> = ({ name, imgurl }) => {
   return (
     <div className='flex items-center justify-between p-4 py-2'>
-      {/* 번호 표시 */}
-      <div className='flex flex-col items-center justify-center w-14 h-14 text-center mr-5'>
-        <span className='text-lg font-bold text-gray-700'>{number}</span> {/* number 표시 */}
+      {/* 이미지 표시 */}
+      <div className='flex flex-col items-center justify-center w-16 h-16 text-center mr-5'>
+        <img
+          src={imgurl}
+          alt={`${name} 이미지`}
+          className='w-full h-full object-cover '
+        />
       </div>
 
       {/* 아티스트 이름 표시 */}

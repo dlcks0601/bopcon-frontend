@@ -10,16 +10,16 @@ interface Song {
 interface RankListProps {
   highlightRanks?: boolean; // 색상 표시 여부
   count: number; // 표시할 곡의 개수
-  mbid: string; // 아티스트 ID
+  artistId: number; // 아티스트 ID
 }
 
-const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, mbid }) => {
+const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, artistId }) => {
   const [songs, setSongs] = useState<Song[]>([]); // 랭크 리스트 데이터 상태
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
 
   useEffect(() => {
-    if (!mbid) {
+    if (!artistId) {
       setError('Invalid artist ID.');
       setLoading(false);
       return;
@@ -28,16 +28,16 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, mbid 
     setLoading(true);
 
     axios
-      .get(`/api/song-ranking/artist/${mbid}`) // 백엔드 API 호출
+      .get(`/api/artists/${artistId}/song-ranking`) // 수정된 백엔드 API 호출
       .then((response) => {
         console.log('Fetched ranklist data:', response.data);
         const data = response.data;
 
-        if (data && typeof data === 'object') {
+        if (Array.isArray(data)) {
           // 데이터를 배열로 변환
-          const songsArray = Object.entries(data).map(([songName, rank]) => ({
-            songName,
-            rank: Number(rank) || 0, // 숫자로 변환 (기본값 0)
+          const songsArray = data.map((song) => ({
+            songName: song.title, // title을 songName으로 매핑
+            rank: song.count || 0, // count를 rank로 매핑 (기본값 0)
           }));
           setSongs(songsArray);
         } else {
@@ -49,7 +49,7 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, mbid 
         setError('Failed to load ranklist.');
       })
       .finally(() => setLoading(false));
-  }, [mbid]);
+  }, [artistId]);
 
   if (loading) {
     return (

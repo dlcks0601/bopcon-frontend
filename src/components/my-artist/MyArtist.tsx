@@ -59,7 +59,7 @@ const MyArtist: React.FC<MyArtistProps> = ({ isExpanded }) => {
         <div key={artist.id}>
           <MyItem 
             name={artist.artistName} 
-            number={artist.favoriteId} // 이미지 URL 전달
+            imgurl={artist.imgUrl} // 이미지 URL 전달
           />
         </div>
       ))}

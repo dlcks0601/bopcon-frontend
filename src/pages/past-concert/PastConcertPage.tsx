@@ -66,7 +66,7 @@ const PastConcertPage = () => {
           <GlobalList title="지난 공연" />
         </div>
         <div className="flex px-3">
-          <PastConcertList artistName={artistData.name} isExpanded={setIsPastConcertExpanded} /> {/* 상태 변수 전달 */}
+          <PastConcertList artistId={artistId} isExpanded={setIsPastConcertExpanded} /> {/* 상태 변수 전달 */}
         </div>
       </div>
     </div>

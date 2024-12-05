@@ -14,50 +14,57 @@ const MyConcert: React.FC<MyConcertProps> = ({ isExpanded }) => {
   const [error, setError] = useState<string | null>(null); // 에러 상태
   const token = useSelector((state: RootState) => state.auth.token); // Redux에서 토큰 가져오기
 
+  // 즐겨찾기 데이터를 가져오는 함수
+  const fetchFavorites = async () => {
+    if (!token) {
+      setError('로그인이 필요합니다.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const favorites = await getUserFavorites({ token });
+      console.log('Fetched Favorites:', favorites); // 디버깅용 콘솔
+      setFavoriteArtists(favorites);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching favorites:', err);
+      setError('즐겨찾기 데이터를 불러오지 못했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 컴포넌트가 처음 마운트되거나 토큰이 변경될 때 데이터를 가져옴
   useEffect(() => {
-    const fetchFavorites = async () => {
-      if (!token) {
-        setError('로그인이 필요합니다.');
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const favorites = await getUserFavorites({ token });
-        setFavoriteArtists(favorites);
-        setError(null);
-      } catch (err) {
-        setError('즐겨찾기 데이터를 불러오지 못했습니다.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFavorites();
   }, [token]);
 
+  // 로딩 중일 때
   if (loading) {
     return <div>로딩 중...</div>;
   }
 
+  // 에러가 발생했을 때
   if (error) {
     return <div>{error}</div>;
   }
 
-  // newConcertTitle이 null이 아닌 항목만 필터링
-  const filteredData = favoriteArtists.filter((concert) => concert.newConcertTitle !== null);
+  // 새로운 콘서트 제목이 있는 항목만 필터링
+  const filteredData = favoriteArtists.filter(
+    (concert) => concert.newConcertTitle !== null
+  );
 
-  // isExpanded가 true면 모든 데이터, false면 2개만 표시
+  // 표시할 데이터 (isExpanded에 따라 조절)
   const visibleData = isExpanded ? filteredData : filteredData.slice(0, 2);
 
   return (
     <div className="w-full">
       {visibleData.map((concert) => (
-        <div key={concert.id}>
+        <div key={concert.id || concert.newConcertTitle}>
           <MyItem 
             name={concert.newConcertTitle} 
-            number={concert.favoriteId} // 이미지 URL 전달
+            imgurl={concert.posterUrl} // 이미지 URL 전달
           />
         </div>
       ))}

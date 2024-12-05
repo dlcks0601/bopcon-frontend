@@ -118,7 +118,7 @@ const ConcertPage: React.FC = () => {
           <GlobalList title="예상 셋리스트" />
         </div>
         <div className="flex px-3">
-          <ExSetlist artistId={concertData.artistId || ''} />
+          <ExSetlist newConcertId={concertData.artistId || ''} />
         </div>
       </div>
     </div>

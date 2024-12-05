@@ -80,9 +80,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({
       <h2 className="text-md font-bold mb-4">{mode === 'create' ? '글쓰기' : '글 수정'}</h2>
 
       {fixedArtistId && artistName && (
-        <div className="mb-2 p-2 border rounded bg-gray-100">
-          <p className="text-sm font-semibold">아티스트</p>
-          <p className="text-lg">{artistName}</p>
+        <div className="mb-2 p-2 border rounded bg-white">
+          <p className="text-sm font-semibold">아티스트 : {artistName}</p>
         </div>
       )}
 

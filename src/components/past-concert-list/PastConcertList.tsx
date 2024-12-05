@@ -4,47 +4,63 @@ import { useNavigate } from 'react-router-dom';
 import PastConcertItem from '../past-concert-item';
 
 interface PastConcertData {
-  pastConcertId: number;
-  date: string;
-  cityName: string;
-  country: string;
-  venueName: string;
+  pastConcertId: string; // ID가 string 타입으로 변경
+  date: string; // 날짜는 string으로 통일
+  cityName: string; // 도시 이름
+  country: string; // 국가
+  venueName: string; // 공연장 이름
 }
 
 interface PastConcertListProps {
-  artistName: string;
+  artistId: string;
   isExpanded: boolean;
 }
 
-const PastConcertList: React.FC<PastConcertListProps> = ({ artistName, isExpanded }) => {
+const PastConcertList: React.FC<PastConcertListProps> = ({ artistId, isExpanded }) => {
   const [data, setData] = useState<PastConcertData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const formatDate = (dateString: string) => dateString.split('T')[0];
-
   useEffect(() => {
-    if (!artistName) {
-      console.error('Artist name is missing.');
+    if (!artistId) {
+      console.error('Artist ID is missing.');
       return;
     }
 
-    setLoading(true);
+    const fetchPastConcertData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-    axios
-      .get(`/api/past-concerts/artist/${artistName}`)
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((err) => {
-        console.error('Failed to fetch past concerts:', err);
+        const response = await axios.get(`/api/artists/${artistId}/past-concerts`);
+        console.log('API response data:', response.data);
+
+        const data = response.data;
+
+        if (Array.isArray(data)) {
+          const formattedData = data.map((item: any) => ({
+            pastConcertId: item.pastConcertId, // ID 필드
+            date: item.date, // 날짜 필드
+            cityName: item.cityName || item.city, // 도시 이름
+            country: item.country, // 국가
+            venueName: item.venueName || 'Unknown Venue', // 공연장 이름
+          }));
+          setData(formattedData);
+        } else {
+          console.error('Unexpected data format:', data);
+          setData([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch past concerts:', error);
         setError('Unable to load the past concerts. Please try again later.');
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
-  }, [artistName]);
+      }
+    };
+
+    fetchPastConcertData();
+  }, [artistId]);
 
   if (loading) {
     return <div className="text-center py-4">Loading past concerts...</div>;
@@ -65,12 +81,12 @@ const PastConcertList: React.FC<PastConcertListProps> = ({ artistName, isExpande
       {data.slice(0, itemsToShow).map((past) => (
         <div
           key={past.pastConcertId}
-          onClick={() => navigate(`/setlist/${past.pastConcertId}`)}
+          onClick={() => navigate(`/artist/${artistId}/setlist/${past.pastConcertId}`)} // pastConcertId 사용
           className="cursor-pointer"
         >
           <PastConcertItem
-            date={formatDate(past.date)}
-            location={`${past.cityName}`}
+            date={past.date}
+            location={past.cityName}
             description={past.venueName}
           />
         </div>

@@ -4,7 +4,7 @@ import SongListItem from '../song-list-item'; // SongListItem 컴포넌트 임�
 
 // Song 데이터 타입 정의
 interface Song {
-  title: string; // 곡 제목
+  songTitle: string; // 곡 제목
   songId: number; // 곡 ID
   order: number; // 곡 순서
   ytLink: string | null; // 유튜브 링크 (null 가능)
@@ -12,10 +12,10 @@ interface Song {
 
 // ExSetlistProps 타입 정의
 interface ExSetlistProps {
-  artistId: number | string; // 동적으로 전달받는 artistId
+  newConcertId: number | string; // 동적으로 전달받는 concert ID
 }
 
-const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
+const ExSetlist: React.FC<ExSetlistProps> = ({ newConcertId }) => {
   const [songs, setSongs] = useState<Song[]>([]); // 셋리스트 데이터 상태
   const [loading, setLoading] = useState<boolean>(true); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
@@ -26,7 +26,7 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
       setLoading(true);
       setError(null); // 이전 에러 상태 초기화
       try {
-        const response = await axios.get(`/api/setlists/predict/artist/${artistId}`); // artistId를 사용한 API 호출
+        const response = await axios.get(`/api/concerts/${newConcertId}/predicted-setlist`); // newConcertId를 사용한 API 호출
         console.log('Fetched setlist data:', response.data);
 
         if (Array.isArray(response.data)) {
@@ -42,10 +42,10 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
       }
     };
 
-    if (artistId) {
-      fetchSetlist(); // artistId가 있을 때만 데이터 요청
+    if (newConcertId) {
+      fetchSetlist(); // newConcertId가 있을 때만 데이터 요청
     }
-  }, [artistId]); // artistId 변경 시 다시 호출
+  }, [newConcertId]); // newConcertId 변경 시 다시 호출
 
   if (loading) {
     return (
@@ -83,8 +83,8 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ artistId }) => {
         {songs.map((song, index) => (
           <li key={song.songId}>
             <SongListItem
-              index={index+1} // 순서를 index로 표시
-              songName={song.title} // 곡 제목
+              index={index + 1} // 순서를 index로 표시
+              songName={song.songTitle} // 곡 제목
               rank={0} // 기본 rank 값 (서버에서 제공되지 않을 경우 사용)
               ytLink={song.ytLink || undefined} // 유튜브 링크 (null일 경우 undefined로 처리)
             />
