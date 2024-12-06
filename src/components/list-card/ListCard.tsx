@@ -6,7 +6,8 @@ interface ListCardProps {
   image: string;
   title: string;
   name: string;
-  date: number[]; // 배열 형태로 수정
+  startDate: number[]; // 배열 형태로 수정
+  endDate: number[];
 }
 
 const ListCard: React.FC<ListCardProps> = ({
@@ -14,14 +15,15 @@ const ListCard: React.FC<ListCardProps> = ({
   image = sampleImg,
   title,
   name,
-  date,
+  startDate,
+    endDate,
 }) => {
   const navigate = useNavigate();
 
   // 날짜 배열을 포맷팅하는 함수
   const formatDate = (dateArray: number[]): string => {
     const [year, month, day] = dateArray;
-    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(2, '0')}`;
   };
 
   const handleCardClick = () => {
@@ -44,7 +46,7 @@ const ListCard: React.FC<ListCardProps> = ({
         <div className='font-medium text-[#a1a1a1] text-[18px]'>{name}</div>
         {/* 날짜 포맷팅된 값으로 표시 */}
         <div className='font-light text-[#a7a7a7] text-[14px]'>
-          {formatDate(date)}
+          {`${formatDate(startDate)}~${formatDate(endDate)}`}
         </div>
       </div>
     </div>

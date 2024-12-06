@@ -94,7 +94,8 @@ const ConcertPage: React.FC = () => {
         />
         {/* Concert Info */}
         <ConcertInfo
-          date={concertData.date}
+          startDate={concertData.startDate}
+          endDate={concertData.endDate}
           venueName={concertData.venueName}
           cityName={concertData.cityName}
           countryName={concertData.countryName}

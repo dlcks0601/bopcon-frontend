@@ -35,7 +35,8 @@ const NowConcertList: React.FC = () => {
 
         if (Array.isArray(data)) {
           const formattedData = data.map((item: any) => ({
-            date: item.date,
+            startDate: item.startDate,
+            endDate: item.endDate,
             name: item.title,
             newConcertId: item.newConcertId, // newConcertId 추가
           }));
@@ -79,7 +80,7 @@ const NowConcertList: React.FC = () => {
           className="cursor-pointer"
           onClick={() => handleItemClick(concert.newConcertId)} // 클릭 이벤트에서 newConcertId 사용
         >
-          <NowConcertItem date={concert.date} name={concert.name} />
+          <NowConcertItem startDate={concert.startDate} endDate={concert.endDate} name={concert.name} />
         </div>
       ))}
     </div>

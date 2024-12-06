@@ -72,7 +72,8 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
                 image={concert.posterUrl}
                 title={concert.title}
                 name={concert.krName}
-                date={concert.date}
+                startDate={concert.startDate}
+                endDate={concert.endDate}
               />
             </div>
           ))}

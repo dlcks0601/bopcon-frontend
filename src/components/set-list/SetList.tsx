@@ -53,13 +53,26 @@ const SetList: React.FC<SetListProps> = ({ artistId, pastConcertId }) => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (songs.length === 0)
-    return (
-      <div style={{ textAlign: 'center', padding: '170px' }}>
-        예상 셋리스트가 준비되어있지 않습니다.
-        <br />
-        죄송합니다.
-      </div>
-    );
+      return (
+          <div style={{ textAlign: 'center', padding: '170px' }}>
+              {/* 첫 번째 줄의 크기를 키움 */}
+              <div style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
+                  아직 업데이트되지 않았어요.
+              </div>
+              {/* setlist.fm을 링크로 변경 */}
+              <div>
+                  <a
+                      href="https://www.setlist.fm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#007BFF', textDecoration: 'underline' }}
+                  >
+                      setlist.fm
+                  </a>{' '}
+                  에서 직접 추가해보세요.
+              </div>
+          </div>
+      );
 
   return (
     <ul>
