@@ -9,7 +9,8 @@ interface ConcertCard {
   posterUrl: string;
   title: string;
   name: string;
-  date: string;
+  startDate: number[];
+  endDate: number[];
 }
 
 const PopPage = () => {
@@ -63,7 +64,8 @@ const PopPage = () => {
               image={card.posterUrl} // API에서 받은 이미지 경로
               title={card.title} // API에서 받은 제목
               name={card.name}   // API에서 받은 이름
-              date={card.date}   // API에서 받은 날짜
+              startDate={card.startDate}   // API에서 받은 날짜
+              endDate={card.endDate}   // API에서 받은 날짜
             />
           ))}
         </div>

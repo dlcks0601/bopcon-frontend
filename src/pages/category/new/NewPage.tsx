@@ -9,7 +9,8 @@ interface ConcertCard {
   posterUrl: string;
   title: string;
   name: string;
-  date: string;
+  startDate: number[];
+  endDate: number[];
 }
 
 const NewPage = () => {
@@ -66,7 +67,8 @@ const NewPage = () => {
                 image={card.posterUrl} // 데이터가 없을 경우 샘플 이미지 사용
                 title={card.title}
                 name={card.name}
-                date={card.date}
+                startDate={card.startDate}
+                endDate={card.endDate}
               />
             ))}
           </div>

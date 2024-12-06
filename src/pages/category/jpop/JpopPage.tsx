@@ -9,9 +9,9 @@ interface ConcertCard {
   posterUrl: string;
   title: string;
   name: string;
-  date: string;
+  startDate: number[];
+  endDate: number[];
 }
-
 const JpopPage = () => {
   const [cardData, setCardData] = useState<ConcertCard[]>([]); // 콘서트 데이터 상태
   const [loading, setLoading] = useState(true);
@@ -57,7 +57,8 @@ const JpopPage = () => {
                 image={card.posterUrl}
                 title={card.title}
                 name={card.name}
-                date={card.date}
+                startDate={card.startDate}
+                endDate={card.endDate}
               />
             ))}
           </div>

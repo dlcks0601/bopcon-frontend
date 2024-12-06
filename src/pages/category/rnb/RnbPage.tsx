@@ -9,7 +9,8 @@ interface ConcertCard {
   posterUrl: string;
   title: string;
   name: string;
-  date: string;
+  startDate: number[];
+  endDate: number[];
 }
 
 const RnbPage = () => {
@@ -63,7 +64,8 @@ const RnbPage = () => {
                 image={card.posterUrl}
                 title={card.title}
                 name={card.name}
-                date={card.date}
+                startDate={card.startDate}
+                endDate={card.endDate}
               />
             ))}
           </div>
