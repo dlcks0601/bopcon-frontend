@@ -24,9 +24,9 @@ const WriteItem: React.FC<WriteItemProps> = ({ title, content, date, nickname , 
       {/* 하단 작성 정보 */}
       <div className="flex justify-end items-center text-gray-500 text-sm mt-3">
         {/* date와 nickname을 합쳐서 표시 */}
-        <span>{`${date} | ${nickname}`}</span>
+        <span>작성자 {`${date} | ${nickname}`}</span>
       </div>
-      <hr className="border-t-1 border-black mt-2" />
+      <hr className="border-t-1 border-gray-400 mt-2" />
     </div>
     </div>
   );

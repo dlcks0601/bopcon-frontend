@@ -8,9 +8,11 @@ import GlobalSingerHeader from '@/components/global-singer-header';
 import axios from 'axios';
 
 const SetListPage = () => {
-  const { artistId } = useParams<{ artistId: string }>();
+  const { artistId, pastConcertId } = useParams<{
+    artistId: string;
+    pastConcertId: string;
+  }>();
 
-  // 상태 관리
   const [artistData, setArtistData] = useState<{
     imgUrl: string;
   } | null>(null);
@@ -19,31 +21,50 @@ const SetListPage = () => {
     cityName: string;
   } | null>(null);
 
-  // artistId를 사용해 concertData 가져오기
+  // Fetch artist data
   useEffect(() => {
     if (artistId) {
       axios
-        .get(`/api/artists/${artistId}/past-concerts`) // 엔드포인트 변경
+        .get(`/api/artists/${artistId}`) // 추가된 API 호출
         .then((response) => {
-          const concert = response.data; // API 응답에서 적절한 필드로 수정
-          setConcertData({
-            venueName: concert.venueName,
-            cityName: concert.cityName,
-          });
           setArtistData({
-            imgUrl: concert.imgUrl,
+            imgUrl: response.data.imgUrl, // API의 응답 형식에 맞게 수정
           });
         })
         .catch((error) => {
-          console.error('Error fetching past concerts data:', error); // 에러 메시지 변경
+          console.error('Error fetching artist data:', error);
         });
     }
   }, [artistId]);
 
-  if (!artistId) {
+  // Fetch concert data
+  useEffect(() => {
+    if (artistId && pastConcertId) {
+      axios
+        .get(`/api/artists/${artistId}/past-concerts`) // 기존 API 호출
+        .then((response) => {
+          const concerts = response.data;
+          const concert = concerts.find(
+            (c: any) => c.pastConcertId === Number(pastConcertId)
+          );
+
+          if (concert) {
+            setConcertData({
+              venueName: concert.venueName,
+              cityName: concert.cityName,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching past concerts data:', error);
+        });
+    }
+  }, [artistId, pastConcertId]);
+
+  if (!artistId || !pastConcertId) {
     return (
       <div className="text-center text-red-500 py-4">
-        Artist ID is missing.
+        Artist ID or Concert ID is missing.
       </div>
     );
   }
@@ -63,6 +84,7 @@ const SetListPage = () => {
           <GlobalSingerHeader
             krName={concertData.venueName}
             engName={concertData.cityName}
+            likeId={artistId} // 수정된 부분
           />
         ) : (
           <div>Loading concert data...</div>
@@ -71,7 +93,7 @@ const SetListPage = () => {
           <GlobalList title="셋리스트" />
         </div>
         <div className="flex px-4">
-          <SetList artistId={artistId}/>
+          <SetList artistId={Number(artistId)} pastConcertId={Number(pastConcertId)} />
         </div>
       </div>
     </div>

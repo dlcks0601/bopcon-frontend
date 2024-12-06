@@ -5,6 +5,7 @@ import SongListItem from '../song-list-item';
 interface Song {
   songName: string; // 곡 이름
   rank: number; // 랭킹 횟수
+  count: number; // 표시할 곡의 개수
 }
 
 interface RankListProps {
@@ -37,7 +38,7 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, artis
           // 데이터를 배열로 변환
           const songsArray = data.map((song) => ({
             songName: song.title, // title을 songName으로 매핑
-            rank: song.count || 0, // count를 rank로 매핑 (기본값 0)
+            count: song.count || 0, // count를 rank로 매핑 (기본값 0)
           }));
           setSongs(songsArray);
         } else {
@@ -90,6 +91,7 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, artis
             key={song.songName} // 곡 이름을 고유 key로 사용
             index={index + 1} // 순서 표시
             songName={song.songName} // 곡 이름 전달
+            count={song.count}
             rank={index + 1} // 순위 전달
             highlight={highlightRanks} // highlightRanks 전달
           />

@@ -137,7 +137,6 @@ const handleCreateSubmit = async (
     title: string,
     content: string,
     categoryType: 'FREE_BOARD' | 'NEW_CONCERT',
-    artistId: number | null,
     newConcertId: number | null
   ) => {
     if (!token) {
@@ -149,14 +148,13 @@ const handleCreateSubmit = async (
       title,
       content,
       categoryType,
-      artistId,
       newConcertId,
     });
 
     try {
       await updateArticle(
         id,
-        { title, content, categoryType, artistId: artistId ?? 0, newConcertId: newConcertId ?? 0 },
+        { title, content, categoryType, newConcertId: newConcertId ?? 0 },
         token
       );
       setIsEditing(false);
@@ -219,7 +217,7 @@ const handleCreateSubmit = async (
                   key={article.id}
                   title={article.title}
                   content={article.content}
-                  date={new Date(article.createdAt).toLocaleDateString()}
+                  date={""}
                   nickname={article.userName || '익명'}
                   onClick={() => setSelectedArticle(article)}
                 />

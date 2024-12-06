@@ -9,16 +9,17 @@ interface Song {
 
 interface SetListProps {
   artistId: number; // 상위 컴포넌트에서 artistId를 전달받음
+  pastConcertId: number; // 특정 콘서트 ID를 받음
 }
 
-const SetList: React.FC<SetListProps> = ({ artistId }) => {
+const SetList: React.FC<SetListProps> = ({ artistId, pastConcertId }) => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!artistId) {
-      setError('Artist ID is missing.');
+    if (!artistId || !pastConcertId) {
+      setError('Artist ID or Concert ID is missing.');
       setLoading(false);
       return;
     }
@@ -26,19 +27,28 @@ const SetList: React.FC<SetListProps> = ({ artistId }) => {
     setLoading(true);
 
     axios
-      .get(`/api/artists/${artistId}/past-setlists`) // 수정된 엔드포인트 사용
+      .get(`/api/artists/${artistId}/past-concerts`) // 수정된 엔드포인트 사용
       .then((response) => {
-        if (response.data && Array.isArray(response.data.setlist)) {
-          setSongs(response.data.setlist);
+        const concerts = response.data; // API 응답 데이터
+        const concert = concerts.find(
+          (c: any) => c.pastConcertId === pastConcertId
+        );
+
+        if (concert && concert.setlists) {
+          const formattedSongs = concert.setlists.map((setlist: any) => ({
+            order: setlist.order,
+            songName: setlist.song.title,
+          }));
+          setSongs(formattedSongs);
         } else {
-          setError('Invalid data format received from server.');
+          setError('Setlist data not found for this concert.');
         }
       })
       .catch(() => {
         setError('Failed to load setlist.');
       })
       .finally(() => setLoading(false));
-  }, [artistId]);
+  }, [artistId, pastConcertId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -53,8 +63,13 @@ const SetList: React.FC<SetListProps> = ({ artistId }) => {
 
   return (
     <ul>
-      {songs.map((song) => (
-        <SongListItem key={song.order} index={song.order} songName={song.songName} rank={0} />
+      {songs.map((song, idx) => (
+        <SongListItem
+          key={song.order} // 여전히 고유 키는 `order` 사용
+          index={idx + 1} // 여기에서 순서를 임의로 1부터 지정
+          songName={song.songName}
+          rank={0}
+        />
       ))}
     </ul>
   );
