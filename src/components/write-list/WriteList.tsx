@@ -69,7 +69,7 @@ const WriteList: React.FC = () => {
   }
 
   // 게시글 3개만 추출
-  const articlesToDisplay = articles.slice(0, 3);
+  const articlesToDisplay = articles.slice(0, 10);
 
   return (
     <div className="w-full mx-auto bg-white mt-4">

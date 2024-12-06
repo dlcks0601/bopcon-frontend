@@ -25,7 +25,7 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
             (a: { newConcertId: number }, b: { newConcertId: number }) =>
               b.newConcertId - a.newConcertId
           ) // 최신순 정렬
-          .slice(0, 3);
+          .slice(0, 10);
         setConcerts(latestConcerts); // API 데이터로 대체
       })
       .catch((error) => console.error('Failed to fetch concert data:', error));
