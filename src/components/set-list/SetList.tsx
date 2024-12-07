@@ -7,6 +7,16 @@ interface Song {
   songName: string;
 }
 
+interface SetListResponse {
+  pastConcertId: number;
+  setlists: {
+    order: number;
+    song: {
+      title: string;
+    };
+  }[];
+}
+
 interface SetListProps {
   artistId: number; // 상위 컴포넌트에서 artistId를 전달받음
   pastConcertId: number; // 특정 콘서트 ID를 받음
@@ -27,15 +37,15 @@ const SetList: React.FC<SetListProps> = ({ artistId, pastConcertId }) => {
     setLoading(true);
 
     axios
-      .get(`/api/artists/${artistId}/past-concerts`) // 수정된 엔드포인트 사용
+      .get<SetListResponse[]>(`/api/artists/${artistId}/past-concerts`) // 수정된 엔드포인트 사용
       .then((response) => {
         const concerts = response.data; // API 응답 데이터
         const concert = concerts.find(
-          (c: any) => c.pastConcertId === pastConcertId
+          (c) => c.pastConcertId === pastConcertId
         );
 
         if (concert && concert.setlists) {
-          const formattedSongs = concert.setlists.map((setlist: any) => ({
+          const formattedSongs = concert.setlists.map((setlist) => ({
             order: setlist.order,
             songName: setlist.song.title,
           }));
@@ -53,26 +63,24 @@ const SetList: React.FC<SetListProps> = ({ artistId, pastConcertId }) => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (songs.length === 0)
-      return (
-          <div style={{ textAlign: 'center', padding: '170px' }}>
-              {/* 첫 번째 줄의 크기를 키움 */}
-              <div style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
-                  아직 업데이트되지 않았어요.
-              </div>
-              {/* setlist.fm을 링크로 변경 */}
-              <div>
-                  <a
-                      href="https://www.setlist.fm"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: '#007BFF', textDecoration: 'underline' }}
-                  >
-                      setlist.fm
-                  </a>{' '}
-                  에서 직접 추가해보세요.
-              </div>
-          </div>
-      );
+    return (
+      <div style={{ textAlign: 'center', padding: '170px' }}>
+        <div style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
+          아직 업데이트되지 않았어요.
+        </div>
+        <div>
+          <a
+            href="https://www.setlist.fm"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#007BFF', textDecoration: 'underline' }}
+          >
+            setlist.fm
+          </a>{' '}
+          에서 직접 추가해보세요.
+        </div>
+      </div>
+    );
 
   return (
     <ul>

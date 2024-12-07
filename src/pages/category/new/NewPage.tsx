@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import GlobalNavigationBar from '@/components/global-navigation-bar';
-import sampleImg from '@/assets/images/sampleimg1.jpg';
 import CategoryHeader from '@/components/category-header';
 import CategoryCard from '@/components/category-card';
 
@@ -16,7 +15,7 @@ interface ConcertCard {
 const NewPage = () => {
   const [cardData, setCardData] = useState<ConcertCard[]>([]); // 콘서트 데이터 상태
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null); // 에러 상태를 문자열 또는 null로 설정
 
   useEffect(() => {
     const fetchCardData = async () => {
@@ -28,7 +27,11 @@ const NewPage = () => {
         const data = await response.json();
         setCardData(data);
       } catch (err) {
-        setError(err.message);
+        if (err instanceof Error) {
+          setError(err.message); // 'Error' 타입일 때만 message 사용
+        } else {
+          setError('An unknown error occurred'); // 'Error'가 아닐 때의 기본 메시지
+        }
       } finally {
         setLoading(false);
       }

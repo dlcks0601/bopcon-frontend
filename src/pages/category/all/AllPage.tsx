@@ -28,12 +28,16 @@ const AllPage = () => {
         const response = await axios.get('/api/new-concerts'); // "all" 장르로 요청
         setCardData(response.data); // 서버에서 받은 데이터 설정
       } catch (err) {
-        setError(err.message || '데이터를 불러오는 중 오류가 발생했습니다.');
+        // err가 Error 객체인지 확인 후 처리
+        if (err instanceof Error) {
+          setError(err.message); // Error 객체에서 message 가져오기
+        } else {
+          setError('데이터를 불러오는 중 알 수 없는 오류가 발생했습니다.');
+        }
       } finally {
         setLoading(false);
       }
     };
-
     fetchConcerts();
   }, []);
 

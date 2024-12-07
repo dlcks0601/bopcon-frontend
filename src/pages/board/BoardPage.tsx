@@ -13,9 +13,17 @@ import GlobalList from '@/components/global-list';
 import WriteItem from '@/components/write-item';
 import axios from 'axios';
 
+// ArtistData 타입 정의
+interface ArtistData {
+  artistId: number;
+  name: string;
+  krName: string;
+  imgUrl: string;
+}
+
 const BoardPage: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [artistData, setArtistData] = useState<any>(null);
+  const [artistData, setArtistData] = useState<ArtistData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
@@ -205,8 +213,8 @@ const handleCreateSubmit = async (
               initialCategoryType={selectedArticle.categoryType}
               fixedArtistId={parseInt(artistId || '0', 10)} // artistId 전달
               initialNewConcertId={selectedArticle.newConcert?.id || null}
-              onSubmit={(title, content, categoryType, artistId, newConcertId) =>
-              handleEditSubmit(selectedArticle.id, title, content, categoryType, artistId, newConcertId)
+              onSubmit={(title, content, categoryType, newConcertId) =>
+              handleEditSubmit(selectedArticle.id, title, content, categoryType, newConcertId)
             }
               onCancel={() => setIsEditing(false)}
             />

@@ -22,16 +22,18 @@ const PopPage = () => {
     const fetchConcerts = async () => {
       try {
         const response = await axios.get('/api/new-concerts?genre=POP');
-        setCardData(response.data); // 데이터가 API 형식에 따라 맞게 들어온다고 가정
+        setCardData(response.data);
       } catch (err) {
+        console.error(err); // 콘솔에 에러 출력
         setError('Failed to fetch data');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchConcerts();
   }, []);
+  
 
   if (loading) {
     return <div className="text-center py-8">Loading...</div>;

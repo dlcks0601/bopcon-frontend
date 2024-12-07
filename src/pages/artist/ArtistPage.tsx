@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams} from 'react-router-dom';
 import axios from 'axios';
 import BackNavigationBar from '@/components/back-navigation-bar';
 import GlobalSingerHeader from '@/components/global-singer-header';
@@ -12,10 +12,18 @@ import MoreButton from '@/components/more-button/MoreButton';
 import SingerLinks from '@/components/singer-links/SingerLinks';
 import NowConcertList from '@/components/now-concert-list/NowConcertList';
 
+interface ArtistData {
+  name: string;
+  krName: string;
+  artistId: number;
+  snsUrl: string;
+  mediaUrl: string;
+  imgUrl: string;
+}
+
 const ArtistPage: React.FC = () => {
   const { artistId } = useParams<{ artistId: string }>();
-  const navigate = useNavigate(); // 페이지 이동을 위한 hook
-  const [artistData, setArtistData] = useState<any>(null);
+  const [artistData, setArtistData] = useState<ArtistData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isRankExpanded, setIsRankExpanded] = useState(false);
   const [isPastConcertExpanded, setIsPastConcertExpanded] = useState(false);
@@ -92,7 +100,7 @@ const ArtistPage: React.FC = () => {
             <RankList
               highlightRanks={true}
               count={displayedRankCount}
-              artistId={artistId}
+              artistId={Number(artistId)}
             />
           </div>
           <MoreButton
@@ -104,7 +112,7 @@ const ArtistPage: React.FC = () => {
           <GlobalList title="지난 공연" />
           <div className="flex px-3">
             <PastConcertList
-              artistId={artistId}
+              artistId={String(artistId)}
               isExpanded={isPastConcertExpanded}
             />
           </div>

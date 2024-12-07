@@ -104,6 +104,7 @@ const WriteList: React.FC = () => {
           onClose={closeModal}
           onEdit={() => {}}
           onDelete={() => {}}
+          hideEditAndDeleteButtons={true}
         />
       )}
     </div>
