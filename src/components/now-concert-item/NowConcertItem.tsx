@@ -28,10 +28,18 @@ const NowConcertItem: React.FC<NowConcertItemProps> = ({ startDate, endDate, nam
     >
       {/* 날짜 */}
       <div className="flex flex-col items-center justify-center bg-black text-white w-16 h-16 text-center mr-5">
-        {/*<span className="text-lg font-bold">{year}</span>*/}
-        <span className="text-sm font-semibold">
-          {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
-        </span>
+        {startDate.toString() === endDate.toString() ? (
+            // startDate와 endDate가 같을 경우
+            <>
+              <span className="text-lg font-bold">{startDate[0]}</span>
+              <span className="text-lg font-semibold">{`${String(startDate[1]).padStart(2, '0')}/${String(startDate[2]).padStart(2, '0')}`}</span>
+            </>
+        ) : (
+            // startDate와 endDate가 다를 경우
+            <span className="text-sm font-semibold">
+            {`${formatDate(startDate)} ~ ${formatDate(endDate)}`}
+          </span>
+        )}
       </div>
 
       {/* 공연 정보 */}

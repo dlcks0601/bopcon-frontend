@@ -46,7 +46,9 @@ const ListCard: React.FC<ListCardProps> = ({
         <div className='font-medium text-[#a1a1a1] text-[18px]'>{name}</div>
         {/* 날짜 포맷팅된 값으로 표시 */}
         <div className='font-light text-[#a7a7a7] text-[14px]'>
-          {`${formatDate(startDate)}~${formatDate(endDate)}`}
+          {startDate.toString() === endDate.toString()
+              ? formatDate(startDate) // startDate와 endDate가 동일하면 한 번만 표시
+              : `${formatDate(startDate)}~${formatDate(endDate)}`}
         </div>
       </div>
     </div>
