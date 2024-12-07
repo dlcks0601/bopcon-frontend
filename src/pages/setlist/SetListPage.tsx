@@ -7,28 +7,33 @@ import SetList from '@/components/set-list';
 import GlobalSingerHeader from '@/components/global-singer-header';
 import axios from 'axios';
 
+interface ArtistData {
+  imgUrl: string;
+}
+
+interface ConcertData {
+  venueName: string;
+  cityName: string;
+  pastConcertId: number;
+}
+
 const SetListPage = () => {
   const { artistId, pastConcertId } = useParams<{
     artistId: string;
     pastConcertId: string;
   }>();
 
-  const [artistData, setArtistData] = useState<{
-    imgUrl: string;
-  } | null>(null);
-  const [concertData, setConcertData] = useState<{
-    venueName: string;
-    cityName: string;
-  } | null>(null);
+  const [artistData, setArtistData] = useState<ArtistData | null>(null);
+  const [concertData, setConcertData] = useState<ConcertData | null>(null);
 
   // Fetch artist data
   useEffect(() => {
     if (artistId) {
       axios
-        .get(`/api/artists/${artistId}`) // 추가된 API 호출
+        .get(`/api/artists/${artistId}`)
         .then((response) => {
           setArtistData({
-            imgUrl: response.data.imgUrl, // API의 응답 형식에 맞게 수정
+            imgUrl: response.data.imgUrl,
           });
         })
         .catch((error) => {
@@ -41,17 +46,18 @@ const SetListPage = () => {
   useEffect(() => {
     if (artistId && pastConcertId) {
       axios
-        .get(`/api/artists/${artistId}/past-concerts`) // 기존 API 호출
+        .get(`/api/artists/${artistId}/past-concerts`)
         .then((response) => {
-          const concerts = response.data;
+          const concerts: ConcertData[] = response.data;
           const concert = concerts.find(
-            (c: any) => c.pastConcertId === Number(pastConcertId)
+            (c) => c.pastConcertId === Number(pastConcertId)
           );
 
           if (concert) {
             setConcertData({
               venueName: concert.venueName,
               cityName: concert.cityName,
+              pastConcertId: concert.pastConcertId,
             });
           }
         })
@@ -84,12 +90,12 @@ const SetListPage = () => {
           <GlobalSingerHeader
             krName={concertData.venueName}
             engName={concertData.cityName}
-            likeId={artistId} // 수정된 부분
+            likeId={Number(artistId)} // 수정된 부분
           />
         ) : (
           <div>Loading concert data...</div>
         )}
-        <div className="w-full mt-4 ">
+        <div className="w-full mt-4">
           <GlobalList title="셋리스트" />
         </div>
         <div className="flex px-4">

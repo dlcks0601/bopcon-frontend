@@ -60,7 +60,7 @@ const HiphopPage = () => {
               title={card.title}
               name={card.name}
               startDate={card.startDate}
-              enrDate={card.endDate}
+              endDate={card.endDate}
             />
           ))}
         </div>

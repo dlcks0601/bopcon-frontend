@@ -18,6 +18,8 @@ import HiphopPage from '@/pages/category/hiphop';
 import ArtistPage from '@/pages/artist/ArtistPage';
 import MyPage from '@/pages/my';
 import BoardPage from '@/pages/board';
+import SearchPage from '@/pages/search';
+
 
 export const router = createBrowserRouter([
   {
@@ -87,7 +89,11 @@ export const router = createBrowserRouter([
   {
     path: '/board/:artistId',
     element : <BoardPage/>,
-  }
+  },
+  {
+    path: "/search", // 검색 페이지 추가
+    element: <SearchPage/>,
+  },
 ]);
 
 export default router;

@@ -1,6 +1,8 @@
 // src/models/Concert.ts
 
 export interface Concert {
+  endDate: [number, number, number];
+  startDate: [number, number, number];
   artistName: string;
   newConcertId: number;
   artistId: number;

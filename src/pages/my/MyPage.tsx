@@ -57,7 +57,7 @@ const MyPage = () => {
               />
               <div className="my-8"></div>
               <GlobalList title="댓글" />
-              <div className="w-full max-w-screen-sm">
+              <div className="px-7 max-w-screen-sm">
                 <MyCommentList isExpanded={isExpanded[3]} />
               </div>
               <MoreButton

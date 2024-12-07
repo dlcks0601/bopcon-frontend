@@ -6,7 +6,7 @@ interface SongListItemProps {
   rank: number; // 랭킹 횟수
   highlight?: boolean; // 색상 표시 여부 (기본값: false)
   ytLink?: string; // YouTube 링크 (선택적)
-  count: number; // 추가: 재생 횟수
+  count?: number; // 추가: 재생 횟수
 }
 
 const SongListItem: React.FC<SongListItemProps> = ({

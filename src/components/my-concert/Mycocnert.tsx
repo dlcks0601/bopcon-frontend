@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MyItem from '../my-item';
 import { getUserFavorites } from '@/apis/favorites.api';
 import { useSelector } from 'react-redux';
-import { RootState } from '@reduxjs/toolkit/query';
+import { RootState } from '@/store'; // Redux store 파일에서 가져오기
 
 interface MyConcertProps {
   isExpanded: boolean; // 더보기 상태를 받아옴
@@ -12,7 +12,9 @@ const MyConcert: React.FC<MyConcertProps> = ({ isExpanded }) => {
   const [favoriteArtists, setFavoriteArtists] = useState<any[]>([]); // 즐겨찾기 데이터를 저장
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
-  const token = useSelector((state: RootState) => state.auth.token); // Redux에서 토큰 가져오기
+
+  // Redux에서 토큰 가져오기
+  const token = useSelector((state: RootState) => state.auth.token);
 
   // 즐겨찾기 데이터를 가져오는 함수
   const fetchFavorites = async () => {

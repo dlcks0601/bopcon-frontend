@@ -4,9 +4,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NowConcertItem from '../now-concert-item/NowConcertItem';
 
 interface ConcertData {
+  endDate: number[]; // 공연 종료 날짜
+  startDate: number[]; // 공연 시작 날짜
   date: string; // 공연 날짜
   name: string; // 공연 부제목 (subTitle)
   newConcertId: string; // concert ID
+}
+
+interface ApiResponse {
+  startDate: number[];
+  endDate: number[];
+  title: string;
+  newConcertId: string;
+  date?: string;
 }
 
 const NowConcertList: React.FC = () => {
@@ -28,23 +38,19 @@ const NowConcertList: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get(`/api/artists/${artistId}/concerts`);
+        const response = await axios.get<ApiResponse[]>(`/api/artists/${artistId}/concerts`);
         console.log('API response data:', response.data); // 데이터 확인
 
         const data = response.data;
 
-        if (Array.isArray(data)) {
-          const formattedData = data.map((item: any) => ({
-            startDate: item.startDate,
-            endDate: item.endDate,
-            name: item.title,
-            newConcertId: item.newConcertId, // newConcertId 추가
-          }));
-          setConcerts(formattedData);
-        } else {
-          console.error('Unexpected data format:', data);
-          setConcerts([]);
-        }
+        const formattedData: ConcertData[] = data.map((item) => ({
+          startDate: item.startDate,
+          endDate: item.endDate,
+          name: item.title,
+          newConcertId: item.newConcertId,
+          date: item.date || '', // date 속성 추가 (없다면 빈 문자열로 처리)
+        }));
+        setConcerts(formattedData);
       } catch (error) {
         console.error('Failed to fetch concerts:', error);
         setError('Failed to load concert data.');

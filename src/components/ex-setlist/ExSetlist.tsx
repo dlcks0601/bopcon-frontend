@@ -87,6 +87,7 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ newConcertId }) => {
               songName={song.songTitle} // 곡 제목
               rank={0} // 기본 rank 값 (서버에서 제공되지 않을 경우 사용)
               ytLink={song.ytLink || undefined} // 유튜브 링크 (null일 경우 undefined로 처리)
+              
             />
           </li>
         ))}

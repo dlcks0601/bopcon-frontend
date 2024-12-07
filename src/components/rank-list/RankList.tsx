@@ -29,27 +29,28 @@ const RankList: React.FC<RankListProps> = ({ highlightRanks = true, count, artis
     setLoading(true);
 
     axios
-      .get(`/api/artists/${artistId}/song-ranking`) // 수정된 백엔드 API 호출
-      .then((response) => {
-        console.log('Fetched ranklist data:', response.data);
-        const data = response.data;
-
-        if (Array.isArray(data)) {
-          // 데이터를 배열로 변환
-          const songsArray = data.map((song) => ({
-            songName: song.title, // title을 songName으로 매핑
-            count: song.count || 0, // count를 rank로 매핑 (기본값 0)
-          }));
-          setSongs(songsArray);
-        } else {
-          setError('Invalid data format received from server.');
-        }
-      })
-      .catch((err) => {
-        console.error('Failed to fetch ranklist:', err);
-        setError('Failed to load ranklist.');
-      })
-      .finally(() => setLoading(false));
+    .get(`/api/artists/${artistId}/song-ranking`) // 수정된 백엔드 API 호출
+    .then((response) => {
+      console.log('Fetched ranklist data:', response.data);
+      const data: { title: string; count?: number }[] = response.data; // 예상 데이터 타입 명시
+  
+      if (Array.isArray(data)) {
+        // 데이터를 배열로 변환
+        const songsArray: Song[] = data.map((song, index) => ({
+          songName: song.title, // title을 songName으로 매핑
+          count: song.count || 0, // count 기본값 0
+          rank: index + 1, // 순위를 추가
+        }));
+        setSongs(songsArray);
+      } else {
+        setError('Invalid data format received from server.');
+      }
+    })
+    .catch((err) => {
+      console.error('Failed to fetch ranklist:', err);
+      setError('Failed to load ranklist.');
+    })
+    .finally(() => setLoading(false));
   }, [artistId]);
 
   if (loading) {
