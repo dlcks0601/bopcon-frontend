@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SongListItem from '../song-list-item';
 
@@ -8,15 +7,29 @@ interface Song {
   songName: string;
 }
 
-const SetList: React.FC = () => {
-  const { pastconcertId } = useParams<{ pastconcertId: string }>(); // URL에서 pastconcertId 추출
+interface SetListResponse {
+  pastConcertId: number;
+  setlists: {
+    order: number;
+    song: {
+      title: string;
+    };
+  }[];
+}
+
+interface SetListProps {
+  artistId: number; // 상위 컴포넌트에서 artistId를 전달받음
+  pastConcertId: number; // 특정 콘서트 ID를 받음
+}
+
+const SetList: React.FC<SetListProps> = ({ artistId, pastConcertId }) => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!pastconcertId) {
-      setError('Past Concert ID is missing.');
+    if (!artistId || !pastConcertId) {
+      setError('Artist ID or Concert ID is missing.');
       setLoading(false);
       return;
     }
@@ -24,59 +37,62 @@ const SetList: React.FC = () => {
     setLoading(true);
 
     axios
-      .get(`/api/setlists/past-concert/${pastconcertId}`)
+      .get<SetListResponse[]>(`/api/artists/${artistId}/past-concerts`) // 수정된 엔드포인트 사용
       .then((response) => {
-        if (Array.isArray(response.data)) {
-          setSongs(response.data);
+        const concerts = response.data; // API 응답 데이터
+        const concert = concerts.find(
+          (c) => c.pastConcertId === pastConcertId
+        );
+
+        if (concert && concert.setlists) {
+          const formattedSongs = concert.setlists.map((setlist) => ({
+            order: setlist.order,
+            songName: setlist.song.title,
+          }));
+          setSongs(formattedSongs);
         } else {
-          setError('Invalid data format received from server.');
+          setError('Setlist data not found for this concert.');
         }
       })
       .catch(() => {
         setError('Failed to load setlist.');
       })
       .finally(() => setLoading(false));
-  }, [pastconcertId]);
+  }, [artistId, pastConcertId]);
 
-  if (loading) {
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (songs.length === 0)
     return (
-      <div className="text-center py-4">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-800 mx-auto"></div>
-        Loading setlist...
+      <div style={{ textAlign: 'center', padding: '170px' }}>
+        <div style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
+          아직 업데이트되지 않았어요.
+        </div>
+        <div>
+          <a
+            href="https://www.setlist.fm"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#007BFF', textDecoration: 'underline' }}
+          >
+            setlist.fm
+          </a>{' '}
+          에서 직접 추가해보세요.
+        </div>
       </div>
     );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center text-red-500 py-4">
-        <p>{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="text-blue-500 underline"
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
-
-  if (songs.length === 0) {
-    return (
-      <div className="text-center text-gray-500 py-4">
-        No setlist available for this concert.
-      </div>
-    );
-  }
 
   return (
-    <div className="w-full mx-auto bg-white mt-4">
-      <ul className="list-none">
-        {songs.map((song) => (
-          <SongListItem key={song.order} index={song.order} songName={song.songName} />
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {songs.map((song, idx) => (
+        <SongListItem
+          key={song.order} // 여전히 고유 키는 `order` 사용
+          index={idx + 1} // 여기에서 순서를 임의로 1부터 지정
+          songName={song.songName}
+          rank={0}
+        />
+      ))}
+    </ul>
   );
 };
 

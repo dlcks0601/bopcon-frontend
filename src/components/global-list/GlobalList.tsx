@@ -1,13 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface GlobalListProps {
   title: string; // 제목
   subtitle?: string; // 부제목 (선택적)
   rightText?: string; // 오른쪽 텍스트 (선택적)
-  centerText?: string; // 가운데 텍스트 (선택적)
+  artistId?: string; // 아티스트 ID (선택적)
 }
 
-const GlobalList: React.FC<GlobalListProps> = ({ title, subtitle, rightText, centerText }) => {
+const GlobalList: React.FC<GlobalListProps> = ({ title, subtitle, rightText, artistId }) => {
+  const navigate = useNavigate(); // useNavigate 훅 사용
+
+  const handleRightTextClick = () => {
+    if (rightText && artistId) {
+      navigate(`/board/${artistId}`); // '/board/:artistId' 경로로 이동
+    }
+  };
+
   return (
     <div className="px-7 py-2">
       {/* 제목, 가운데 텍스트, 오른쪽 텍스트를 flex로 배치 */}
@@ -20,16 +29,12 @@ const GlobalList: React.FC<GlobalListProps> = ({ title, subtitle, rightText, cen
           )}
         </div>
 
-        {/* 가운데: 텍스트 (예: 더보기) */}
-        {centerText && (
-          <span className="text-lg text-neutral-950 mx-auto cursor-pointer hover:text-blue-700">
-            {centerText}
-          </span>
-        )}
-
         {/* 오른쪽: 텍스트 (예: 더보기) */}
         {rightText && (
-          <span className="text-lg text-gray-500 cursor-pointer hover:text-gray-700">
+          <span
+            className="text-lg text-gray-500 cursor-pointer hover:text-gray-700"
+            onClick={handleRightTextClick} // 클릭 이벤트 추가
+          >
             {rightText}
           </span>
         )}

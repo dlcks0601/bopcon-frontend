@@ -16,6 +16,10 @@ import RockPage from '@/pages/category/rock';
 import PopPage from '@/pages/category/pop';
 import HiphopPage from '@/pages/category/hiphop';
 import ArtistPage from '@/pages/artist/ArtistPage';
+import MyPage from '@/pages/my';
+import BoardPage from '@/pages/board';
+import SearchPage from '@/pages/search';
+
 
 export const router = createBrowserRouter([
   {
@@ -35,7 +39,7 @@ export const router = createBrowserRouter([
     element: <ConcertPage />,
   },
   {
-    path: '/setlist/:pastconcertId', // SetList 페이지에 id 파라미터 추가
+    path: '/artist/:artistId/setlist/:pastConcertId', // SetList 페이지에 id 파라미터 추가
     element: <SetListPage />,
   },
   {
@@ -77,7 +81,19 @@ export const router = createBrowserRouter([
   {
     path: '/artist/:artistId',
     element : <ArtistPage/>,
-  }
+  },
+  {
+    path: '/mypage',
+    element : <MyPage/>,
+  },
+  {
+    path: '/board/:artistId',
+    element : <BoardPage/>,
+  },
+  {
+    path: "/search", // 검색 페이지 추가
+    element: <SearchPage/>,
+  },
 ]);
 
 export default router;

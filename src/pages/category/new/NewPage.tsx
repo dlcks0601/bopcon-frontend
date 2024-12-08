@@ -1,19 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import GlobalNavigationBar from '@/components/global-navigation-bar';
-import sampleImg from '@/assets/images/sampleimg1.jpg';
 import CategoryHeader from '@/components/category-header';
 import CategoryCard from '@/components/category-card';
 
+interface ConcertCard {
+  newConcertId: number; // newConcertId 추가
+  posterUrl: string;
+  title: string;
+  name: string;
+  startDate: number[];
+  endDate: number[];
+}
+
 const NewPage = () => {
-  // 샘플 데이터
-  const cardData = [
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-  ];
+  const [cardData, setCardData] = useState<ConcertCard[]>([]); // 콘서트 데이터 상태
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); // 에러 상태를 문자열 또는 null로 설정
+
+  useEffect(() => {
+    const fetchCardData = async () => {
+      try {
+        const response = await fetch('/api/new-concerts');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setCardData(data);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message); // 'Error' 타입일 때만 message 사용
+        } else {
+          setError('An unknown error occurred'); // 'Error'가 아닐 때의 기본 메시지
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCardData();
+  }, []);
 
   return (
     <div className='relative bg-white w-full min-h-screen flex justify-center'>
@@ -29,18 +54,31 @@ const NewPage = () => {
           <CategoryHeader title='NEW' />
         </div>
 
+        {/* 로딩 상태 */}
+        {loading && <div className='text-center mt-4'>Loading...</div>}
+
+        {/* 에러 상태 */}
+        {error && <div className='text-center mt-4 text-red-500'>Error: {error}</div>}
+
         {/* 카드 목록 */}
-        <div className='grid grid-cols-2 gap-4 px-4 mt-[-20px]'>
-          {cardData.map((card, index) => (
-            <CategoryCard
-              key={index}
-              image={card.image}
-              title={card.title}
-              name={card.name}
-              date={card.date}
-            />
-          ))}
-        </div>
+        {!loading && !error && cardData.length > 0 ? (
+          <div className='grid grid-cols-2 gap-4 px-4 mt-[-20px]'>
+            {cardData.map((card) => (
+              <CategoryCard
+                key={card.newConcertId} // newConcertId를 키로 사용
+                concertId={card.newConcertId} // 그대로 newConcertId 전달
+                image={card.posterUrl} // 데이터가 없을 경우 샘플 이미지 사용
+                title={card.title}
+                name={card.name}
+                startDate={card.startDate}
+                endDate={card.endDate}
+              />
+            ))}
+          </div>
+        ) : (
+          !loading &&
+          !error && <div className='text-center mt-4'>No data available.</div>
+        )}
       </div>
     </div>
   );

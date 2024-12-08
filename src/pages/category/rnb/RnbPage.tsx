@@ -1,19 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import GlobalNavigationBar from '@/components/global-navigation-bar';
-import sampleImg from '@/assets/images/sampleimg1.jpg';
 import CategoryHeader from '@/components/category-header';
 import CategoryCard from '@/components/category-card';
+import axios from 'axios';
+
+interface ConcertCard {
+  newConcertId: number; // newConcertId 추가
+  posterUrl: string;
+  title: string;
+  name: string;
+  startDate: number[];
+  endDate: number[];
+}
 
 const RnbPage = () => {
-  // 샘플 데이터
-  const cardData = [
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-    { image: sampleImg, title: 'sample', name: 'name', date: '1111.11.11' },
-  ];
+  const [cardData, setCardData] = useState<ConcertCard[]>([]); // 콘서트 데이터 상태
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); // 에러 상태 관리
+
+  useEffect(() => {
+    const fetchConcerts = async () => {
+      try {
+        setIsLoading(true);
+        // API 호출 (쿼리 파라미터를 직접 URL에 추가)
+        const response = await axios.get('/api/new-concerts?genre=R&B');
+        setCardData(response.data);
+      } catch (err) {
+        console.error('Error fetching concerts:', err);
+        setError('Failed to load concerts');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchConcerts();
+  }, []);
 
   return (
     <div className='relative bg-white w-full min-h-screen flex justify-center'>
@@ -29,18 +50,26 @@ const RnbPage = () => {
           <CategoryHeader title='R&B' />
         </div>
 
-        {/* 카드 목록 */}
-        <div className='grid grid-cols-2 gap-4 px-4 mt-[-20px]'>
-          {cardData.map((card, index) => (
-            <CategoryCard
-              key={index}
-              image={card.image}
-              title={card.title}
-              name={card.name}
-              date={card.date}
-            />
-          ))}
-        </div>
+        {/* 로딩 및 에러 처리 */}
+        {isLoading ? (
+          <div className='text-center mt-8'>Loading...</div>
+        ) : error ? (
+          <div className='text-center mt-8 text-red-500'>{error}</div>
+        ) : (
+          <div className='grid grid-cols-2 gap-4 px-4 mt-[-20px]'>
+            {cardData.map((card) => (
+              <CategoryCard
+                key={card.newConcertId} // newConcertId를 키로 사용
+                concertId={card.newConcertId} // 그대로 newConcertId 전달
+                image={card.posterUrl}
+                title={card.title}
+                name={card.name}
+                startDate={card.startDate}
+                endDate={card.endDate}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

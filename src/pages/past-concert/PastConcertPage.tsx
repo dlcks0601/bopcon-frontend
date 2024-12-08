@@ -9,7 +9,9 @@ import GlobalSingerHeader from '@/components/global-singer-header';
 
 const PastConcertPage = () => {
   const { artistId } = useParams<{ artistId: string }>(); // URL에서 artistId 추출
-  const [artistData, setArtistData] = useState<{ imgUrl: string; name: string; krName: string; mbid: string } | null>(null);
+  const [artistData, setArtistData] = useState<{
+    artistId: number; imgUrl: string; name: string; krName: string; mbid: string 
+} | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [,setIsPastConcertExpanded] = useState(false); // 상태 변수 올바르게 정의
@@ -59,12 +61,12 @@ const PastConcertPage = () => {
           <BackNavigationBar />
         </div>
         <SingerDetailImg Img={artistData.imgUrl} /> {/* 이미지 URL 전달 */}
-        <GlobalSingerHeader krName={artistData.name} engName={artistData.krName} /> {/* 이름 데이터 전달 */}
+        <GlobalSingerHeader krName={artistData.name} engName={artistData.krName} likeId={artistData.artistId} /> {/* 이름 데이터 전달 */}
         <div className="w-full mt-4">
           <GlobalList title="지난 공연" />
         </div>
         <div className="flex px-3">
-          <PastConcertList artistName={artistData.name} isExpanded={setIsPastConcertExpanded} /> {/* 상태 변수 전달 */}
+          <PastConcertList artistId={artistId} isExpanded={Boolean(setIsPastConcertExpanded)} /> {/* 상태 변수 전달 */}
         </div>
       </div>
     </div>

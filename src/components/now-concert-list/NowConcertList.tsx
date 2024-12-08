@@ -4,8 +4,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NowConcertItem from '../now-concert-item/NowConcertItem';
 
 interface ConcertData {
+  endDate: number[]; // 공연 종료 날짜
+  startDate: number[]; // 공연 시작 날짜
   date: string; // 공연 날짜
   name: string; // 공연 부제목 (subTitle)
+  newConcertId: string; // concert ID
+}
+
+interface ApiResponse {
+  startDate: number[];
+  endDate: number[];
+  title: string;
+  newConcertId: string;
+  date?: string;
 }
 
 const NowConcertList: React.FC = () => {
@@ -22,34 +33,37 @@ const NowConcertList: React.FC = () => {
       return;
     }
 
-    axios
-      .get(`/api/new-concerts/${artistId}`) // API 호출
-      .then((response) => {
+    const fetchConcertData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await axios.get<ApiResponse[]>(`/api/artists/${artistId}/concerts`);
         console.log('API response data:', response.data); // 데이터 확인
+
         const data = response.data;
 
-        // 단일 객체를 배열로 변환
-        if (data && typeof data === 'object') {
-          setConcerts([{
-            date: data.date,
-            name: data.subTitle,
-          }]);
-        } else {
-          console.error('Unexpected data format:', data);
-          setConcerts([]);
-        }
-      })
-      .catch((error) => {
+        const formattedData: ConcertData[] = data.map((item) => ({
+          startDate: item.startDate,
+          endDate: item.endDate,
+          name: item.title,
+          newConcertId: item.newConcertId,
+          date: item.date || '', // date 속성 추가 (없다면 빈 문자열로 처리)
+        }));
+        setConcerts(formattedData);
+      } catch (error) {
         console.error('Failed to fetch concerts:', error);
         setError('Failed to load concert data.');
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchConcertData();
   }, [artistId]);
 
-  const handleItemClick = () => {
-    if (artistId) {
-      navigate(`/concert/${artistId}`); // artistId 기반으로 라우팅
-    }
+  const handleItemClick = (newConcertId: string) => {
+    navigate(`/concert/${newConcertId}`); // newConcertId 기반으로 라우팅
   };
 
   if (loading) {
@@ -70,9 +84,9 @@ const NowConcertList: React.FC = () => {
         <div
           key={index}
           className="cursor-pointer"
-          onClick={handleItemClick} // 클릭 이벤트 추가
+          onClick={() => handleItemClick(concert.newConcertId)} // 클릭 이벤트에서 newConcertId 사용
         >
-          <NowConcertItem date={concert.date} name={concert.name} />
+          <NowConcertItem startDate={concert.startDate} endDate={concert.endDate} name={concert.name} />
         </div>
       ))}
     </div>

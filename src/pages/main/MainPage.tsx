@@ -19,10 +19,14 @@ const MainPage = () => {
         </div>
 
         {/* GlobalListContents 섹션 */}
-        <div className='relative z-0'>
+        <div className='relative z-0'> 
           <GlobalListContents title='NEW' />
-          <GlobalListContents title='ALL' />
+          <GlobalListContents title='POP' />
           <GlobalListContents title='JPOP' />
+          <GlobalListContents title='ROCK' />
+          <GlobalListContents title='HIPHOP' />
+          <GlobalListContents title='R&B' />
+
         </div>
       </div>
     </div>
