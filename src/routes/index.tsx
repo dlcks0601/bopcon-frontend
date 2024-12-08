@@ -19,7 +19,8 @@ import ArtistPage from '@/pages/artist/ArtistPage';
 import MyPage from '@/pages/my';
 import BoardPage from '@/pages/board';
 import SearchPage from '@/pages/search';
-
+import AdminPage from "@/pages/admin";
+import AdminRoute from "../components/admin-route/AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -94,6 +95,14 @@ export const router = createBrowserRouter([
     path: "/search", // 검색 페이지 추가
     element: <SearchPage/>,
   },
+  {
+    path: '/admin',
+    element: (
+        <AdminRoute>
+          <AdminPage />
+        </AdminRoute>
+    ),
+  }
 ]);
 
 export default router;

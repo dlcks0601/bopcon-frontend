@@ -26,7 +26,7 @@ const ExSetlist: React.FC<ExSetlistProps> = ({ newConcertId }) => {
       setLoading(true);
       setError(null); // 이전 에러 상태 초기화
       try {
-        const response = await axios.get(`/api/concerts/${newConcertId}/predicted-setlist`); // newConcertId를 사용한 API 호출
+        const response = await axios.get(`/api/new-concerts/${newConcertId}/predicted-setlist`); // newConcertId를 사용한 API 호출
         console.log('Fetched setlist data:', response.data);
 
         if (Array.isArray(response.data)) {

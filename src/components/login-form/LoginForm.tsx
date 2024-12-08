@@ -52,7 +52,7 @@ const LoginForm = () => {
       // 페이지 이동 지연 로그인 확인 위해서 일부러 했음
       setTimeout(() => {
         console.log('페이지 이동');
-        navigate('/');
+        // navigate('/');
       }, 100);
     } catch (error) {
       if (axios.isAxiosError(error)) {
