@@ -56,9 +56,11 @@ const ArtistLike: React.FC<ArtistLikeProps> = ({ artistId }) => {
     try {
       if (favorite) {
         await apiRemoveArtistFavorite({ artistId, token });
+        setFavorite(false);
         dispatch(removeFavorite({ artistId }));
       } else {
         await apiAddArtistFavorite({ artistId, token });
+        setFavorite(true);
         const newFavorite = {
           favoriteId: Math.random(),
           artistId,
