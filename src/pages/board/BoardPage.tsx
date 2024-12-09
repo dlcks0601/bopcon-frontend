@@ -12,6 +12,7 @@ import GlobalSingerHeader from '@/components/global-singer-header';
 import GlobalList from '@/components/global-list';
 import WriteItem from '@/components/write-item';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // ArtistData 타입 정의
 interface ArtistData {
@@ -22,6 +23,7 @@ interface ArtistData {
 }
 
 const BoardPage: React.FC = () => {
+  const navigate = useNavigate();
   const [articles, setArticles] = useState<Article[]>([]);
   const [artistData, setArtistData] = useState<ArtistData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -108,6 +110,7 @@ const handleCreateSubmit = async (
 ) => {
   if (!token) {
     alert('로그인이 필요합니다.');
+    
     return;
   }
 
@@ -234,9 +237,16 @@ const handleCreateSubmit = async (
           )}
           <div className="w-full mx-64">
           <button
-            onClick={() => setIsCreating(true)}
-            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-600 "
-          >
+              onClick={() => {
+                if (!token) {
+                  alert('로그인이 필요합니다.');
+                  navigate('/login');
+                  return;
+                }
+                setIsCreating(true);
+              }}
+              className="bg-black text-white px-4 py-2 rounded hover:bg-gray-600"
+            >
             글쓰기
           </button>
         </div>

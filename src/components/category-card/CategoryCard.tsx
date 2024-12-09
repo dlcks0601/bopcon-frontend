@@ -1,11 +1,12 @@
 import sampleImg from '@/assets/images/sampleimg1.jpg';
+import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ListCardProps {
   concertId: number; // 추가된 concertId
   image: string;
   title: string;
-  name: string;
+  name: ReactNode;
   startDate: number[]; // 배열 형태로 수정
   endDate: number[];
 }

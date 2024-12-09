@@ -42,6 +42,11 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
     fetchConcerts();
   }, [title]); // title 값이 변경될 때마다 호출
 
+  // 아티스트 이름 클릭 핸들러
+  const handleArtistClick = (artistId: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // 이벤트 전파 중단
+    navigate(`/artist/${artistId}`);
+  };
   return (
     <div className='flex flex-col w-full mx-auto h-auto py-[8px]'>
       {/* 상단 타이틀과 더보기 */}
@@ -71,7 +76,14 @@ const GlobalListContents: React.FC<GlobalListContentsProps> = ({ title }) => {
                 concertId={concert.newConcertId}
                 image={concert.posterUrl}
                 title={concert.title}
-                name={concert.krName}
+                name={
+                  <span
+                    className="text-[#8c8c8c]  cursor-pointer"
+                    onClick={(e) => handleArtistClick(concert.artistId, e)}
+                  >
+                    {concert.artistName}
+                  </span>
+                }
                 startDate={concert.startDate}
                 endDate={concert.endDate}
               />

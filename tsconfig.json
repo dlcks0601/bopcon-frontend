@@ -9,6 +9,8 @@
     "module": "esnext",
     "jsx": "react-jsx"
   },
+  "include": ["src/**/*"], // 모든 src 디렉토리 파일 포함
+  "exclude": ["node_modules"],
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

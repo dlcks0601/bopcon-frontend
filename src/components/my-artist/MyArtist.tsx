@@ -3,6 +3,7 @@ import MyItem from '../my-item';
 import { getUserFavorites } from '@/apis/favorites.api'; // 즐겨찾기 API 가져오기
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { useNavigate } from 'react-router-dom';
 
 interface MyArtistProps {
   isExpanded: boolean; // 더보기 상태를 받아옴
@@ -13,6 +14,7 @@ const MyArtist: React.FC<MyArtistProps> = ({ isExpanded }) => {
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
   const token = useSelector((state: RootState) => state.auth.token); // Redux에서 토큰 가져오기
+  const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -53,10 +55,18 @@ const MyArtist: React.FC<MyArtistProps> = ({ isExpanded }) => {
     ? filteredArtists
     : filteredArtists.slice(0, 2);
 
+  const handleItemClick = (artistId: string) => {
+    navigate(`/artist/${artistId}`); // artist/artistId로 이동
+  };
+
   return (
     <div className="w-full">
       {visibleData.map((artist) => (
-        <div key={artist.id}>
+        <div
+          key={artist.artistId} // 여기서 artistId를 사용
+          onClick={() => handleItemClick(artist.artistId)} // artistId를 클릭 이벤트로 사용
+          className="cursor-pointer" // 클릭 가능한 UI 표시를 위한 스타일
+        >
           <MyItem 
             name={artist.artistName} 
             imgurl={artist.imgUrl} // 이미지 URL 전달
