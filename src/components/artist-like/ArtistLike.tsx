@@ -14,12 +14,14 @@ import {
 } from '@/apis/favorites.api';
 import { HeartIcon as SolidHeartIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as OutlineHeartIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
 
 interface ArtistLikeProps {
   artistId: number;
 }
 
 const ArtistLike: React.FC<ArtistLikeProps> = ({ artistId }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state: RootState) => state.auth.token);
   const loading = useSelector((state: RootState) => state.artistlikes.loading);
@@ -48,6 +50,7 @@ const ArtistLike: React.FC<ArtistLikeProps> = ({ artistId }) => {
   const handleLikeToggle = async () => {
     if (!token) {
       alert('로그인이 필요합니다!');
+      navigate('/login');
       return;
     }
 
