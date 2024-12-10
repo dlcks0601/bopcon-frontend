@@ -15,12 +15,14 @@ const ConcertCrud = () => {
         countryCode: "",
         ticketPlatforms: "",
         ticketUrl: "",
-        posterUrl: "",
         genre: "",
         concertStatus: "UPCOMING",
     });
     const [isEditing, setIsEditing] = useState(false);
     const [editConcertId, setEditConcertId] = useState<number | null>(null);
+
+    // 포스터 파일 선택 상태
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     // JWT 토큰 가져오기
     const getToken = () => localStorage.getItem('token');
@@ -49,12 +51,32 @@ const ConcertCrud = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    // 파일 선택 처리
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setSelectedFile(e.target.files[0]);
+        } else {
+            setSelectedFile(null);
+        }
+    };
+
     // 콘서트 등록
     const addConcert = async () => {
+        const multipartFormData = new FormData();
+
+        // 콘서트 정보 JSON 문자열
+        const concertJsonBlob = new Blob([JSON.stringify(formData)], { type: "application/json" });
+        multipartFormData.append("newConcert", concertJsonBlob, "concert.json");
+        // 파일 추가
+        if (selectedFile) {
+            multipartFormData.append("file", selectedFile);
+        }
+
         try {
-            await axios.post("/api/admin/new-concert", formData, {
+            await axios.post("/api/admin/new-concert", multipartFormData, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`,
+                    "Content-Type": "multipart/form-data"
                 },
             });
             fetchConcerts();
@@ -67,10 +89,21 @@ const ConcertCrud = () => {
     // 콘서트 수정
     const updateConcert = async () => {
         if (editConcertId === null) return;
+
+        const multipartFormData = new FormData();
+
+        const concertJsonBlob = new Blob([JSON.stringify(formData)], { type: "application/json" });
+        multipartFormData.append("newConcert", concertJsonBlob, "concert.json");
+
+        if (selectedFile) {
+            multipartFormData.append("file", selectedFile);
+        }
+
         try {
-            await axios.put(`/api/admin/new-concert/${editConcertId}`, formData, {
+            await axios.put(`/api/admin/new-concert/${editConcertId}`, multipartFormData, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`,
+                    "Content-Type": "multipart/form-data"
                 },
             });
             fetchConcerts();
@@ -96,10 +129,10 @@ const ConcertCrud = () => {
             countryCode: concert.countryCode,
             ticketPlatforms: concert.ticketPlatforms,
             ticketUrl: concert.ticketUrl,
-            posterUrl: concert.posterUrl,
             genre: concert.genre,
             concertStatus: concert.concertStatus,
         });
+        setSelectedFile(null);
     };
 
     // 수정 모드 취소
@@ -123,10 +156,10 @@ const ConcertCrud = () => {
             countryCode: "",
             ticketPlatforms: "",
             ticketUrl: "",
-            posterUrl: "",
             genre: "",
             concertStatus: "UPCOMING",
         });
+        setSelectedFile(null);
     };
 
     // 콘서트 삭제
@@ -234,12 +267,11 @@ const ConcertCrud = () => {
                     onChange={handleInputChange}
                     className="border p-2 mb-2 w-full"
                 />
+                {/* posterUrl 대신 파일 업로드 인풋 */}
                 <input
-                    type="text"
-                    name="posterUrl"
-                    value={formData.posterUrl}
-                    placeholder="포스터 URL"
-                    onChange={handleInputChange}
+                    type="file"
+                    name="file"
+                    onChange={handleFileChange}
                     className="border p-2 mb-2 w-full"
                 />
                 <input

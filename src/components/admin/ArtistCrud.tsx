@@ -7,10 +7,11 @@ const ArtistCrud = () => {
         mbid: "",
         name: "",
         krName: "",
-        imgUrl: "",
+        // imgUrl: "",  // 더 이상 직접 URL을 받지 않으므로 제거
         snsUrl: "",
         mediaUrl: "",
     });
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editArtistId, setEditArtistId] = useState<number | null>(null);
 
@@ -34,18 +35,35 @@ const ArtistCrud = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    // 파일 선택 처리
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setSelectedFile(e.target.files[0]);
+        } else {
+            setSelectedFile(null);
+        }
+    };
+
     // 아티스트 등록
     const addArtist = async () => {
         const token = localStorage.getItem('token');
+        const multipartFormData = new FormData();
+
+        // JSON 문자열을 Blob으로 감싸고, 타입을 application/json으로 명시
+        const artistJsonBlob = new Blob([JSON.stringify(formData)], { type: "application/json" });
+        multipartFormData.append("artist", artistJsonBlob, "artist.json");
+
+        if (selectedFile) {
+            multipartFormData.append("file", selectedFile);
+        }
 
         try {
-            await axios.post("/api/admin/artist", formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // JWT 토큰 추가
-                    },
-                }
-            );
+            await axios.post("/api/admin/artist", multipartFormData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                },
+            });
             fetchArtists();
             resetForm();
         } catch (error) {
@@ -57,19 +75,23 @@ const ArtistCrud = () => {
     const updateArtist = async () => {
         if (editArtistId === null) return;
 
-        // JWT 토큰 가져오기 (예: 로컬 스토리지 또는 쿠키에서)
         const token = localStorage.getItem('token');
+        const multipartFormData = new FormData();
+
+        const artistJsonBlob = new Blob([JSON.stringify(formData)], { type: "application/json" });
+        multipartFormData.append("artist", artistJsonBlob, "artist.json");
+
+        if (selectedFile) {
+            multipartFormData.append("file", selectedFile);
+        }
 
         try {
-            await axios.put(
-                `/api/admin/artists/${editArtistId}`,
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // JWT 토큰 추가
-                    },
-                }
-            );
+            await axios.put(`/api/admin/artists/${editArtistId}`, multipartFormData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data"
+                },
+            });
             fetchArtists();
             resetForm();
         } catch (error) {
@@ -85,10 +107,10 @@ const ArtistCrud = () => {
             mbid: artist.mbid,
             name: artist.name,
             krName: artist.krName,
-            imgUrl: artist.imgUrl,
             snsUrl: artist.snsUrl,
             mediaUrl: artist.mediaUrl,
         });
+        setSelectedFile(null); // 파일 선택 초기화
     };
 
     // 수정 모드 취소
@@ -104,34 +126,28 @@ const ArtistCrud = () => {
             mbid: "",
             name: "",
             krName: "",
-            imgUrl: "",
             snsUrl: "",
             mediaUrl: "",
         });
+        setSelectedFile(null);
     };
 
     // 아티스트 삭제
     const deleteArtist = async (id: number) => {
         if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
-        // JWT 토큰 가져오기 (예: 로컬 스토리지 또는 쿠키에서)
         const token = localStorage.getItem('token');
-
         try {
-            await axios.delete(
-                `/api/admin/artists/${id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // JWT 토큰 추가
-                    },
-                }
-            );
+            await axios.delete(`/api/admin/artists/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             fetchArtists();
         } catch (error) {
             console.error("아티스트 삭제 실패:", error);
         }
     };
-
 
     return (
         <div>
@@ -161,12 +177,11 @@ const ArtistCrud = () => {
                     onChange={handleInputChange}
                     className="border p-2 mb-2 w-full"
                 />
+                {/* 이미지 URL 인풋 대신 파일 업로드 인풋 */}
                 <input
-                    type="text"
-                    name="imgUrl"
-                    value={formData.imgUrl}
-                    placeholder="이미지 URL"
-                    onChange={handleInputChange}
+                    type="file"
+                    name="file"
+                    onChange={handleFileChange}
                     className="border p-2 mb-2 w-full"
                 />
                 <input
