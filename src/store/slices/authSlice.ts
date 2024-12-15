@@ -8,7 +8,7 @@ interface LoginPayload {
   nickname: string;
 }
 
-interface AuthState {
+export interface AuthState {
   isLoggedIn: boolean;
   token: string | null;
   refreshToken: string | null;

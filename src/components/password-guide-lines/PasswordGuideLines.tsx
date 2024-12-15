@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { CheckCircleIcon } from '@heroicons/react/20/solid';
 
 const PasswordGuideLines = ({ password }: { password: string }) => {

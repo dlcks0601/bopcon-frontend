@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import MyNavigationBar from '@/components/my-navigation-bar/MyNavigationBar';
 import GlobalList from '@/components/global-list';
 import MoreButton from '@/components/more-button';

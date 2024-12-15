@@ -7,10 +7,16 @@
     "moduleResolution": "node",
     "target": "es6",
     "module": "esnext",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "declaration": true, // .d.ts 파일 생성
+    "outDir": "./dist", // 빌드 파일 출력 경로
+    "rootDir": "./src", // 소스 파일 경로
+    "forceConsistentCasingInFileNames": true,
+    "emitDeclarationOnly": false,
+
   },
   "include": ["src/**/*"], // 모든 src 디렉토리 파일 포함
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist"], // 빌드 제외 폴더
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

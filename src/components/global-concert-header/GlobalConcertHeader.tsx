@@ -1,6 +1,6 @@
 import React from 'react';
 import DetailName from '../detail-name.tsx';
-import ConcertLike from '../concert-like/index.tsx';
+import ConcertLike from '../concert-like/index';
 
 interface GlobalConcertHeaderProps {
   title: string;

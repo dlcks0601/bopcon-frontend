@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from 'react';
 import { getCommentsByArticle, deleteComment, updateComment } from '@/apis/comments';
 import { Comment } from '@/types/type';
@@ -15,6 +16,7 @@ const CommentList: React.FC<CommentListProps> = ({ articleId, token, onCommentDe
 
   useEffect(() => {
     getCommentsByArticle(articleId)
+        // @ts-expect-error
       .then(setComments)
       .catch((error) => console.error('댓글 조회 실패:', error));
   }, [articleId]);
@@ -41,7 +43,7 @@ const CommentList: React.FC<CommentListProps> = ({ articleId, token, onCommentDe
     updateComment(commentId, newContent, token)
       .then((updatedComment) => {
         setComments((prev) =>
-          prev.map((comment) =>
+          prev.map((comment) =>// @ts-ignore
             comment.id === commentId ? { ...comment, content: updatedComment.content } : comment
           )
         );

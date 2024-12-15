@@ -33,7 +33,7 @@ const LoginForm = () => {
       navigate('/');
     }
   }, [isLoggedIn, navigate]);
-
+         
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleLogin = async (data: LoginFormValues) => {
@@ -115,9 +115,9 @@ const LoginForm = () => {
               type='email'
               {...register('email', { required: '이메일을 입력하세요.' })}
             />
-            {errors.email && (
-              <p className='text-red-500 text-sm'>{errors.email.message}</p>
-            )}
+            {!isLoading && errors.email && (
+  <p className='text-red-500 text-sm'>{errors.email.message}</p>
+)}
           </div>
           <div className='w-full mb-12'>
             <GlobalInput

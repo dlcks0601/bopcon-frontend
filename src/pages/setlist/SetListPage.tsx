@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import BackNavigationBar from '@/components/back-navigation-bar';
 import SingerDetailImg from '@/components/singer-detail-img/SingerDetailImg';

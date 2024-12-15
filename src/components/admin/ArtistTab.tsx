@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import ArtistCrud from "./ArtistCrud";
 import ArtistSync from "./ArtistSync";
 
