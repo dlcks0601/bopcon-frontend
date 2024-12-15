@@ -20,7 +20,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-      
+      '/auth': {
+        target: 'http://bopcon-env-1.eba-t4zkjfm2.ap-northeast-2.elasticbeanstalk.com', // 추가로 다른 API 경로를 백엔드로 전달
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   test: {

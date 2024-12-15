@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://bopcon-env-1.eba-t4zkjfm2.ap-northeast-2.elasticbeanstalk.com",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -49,4 +50,5 @@
     "vite": "^5.4.10",
     "vitest": "^2.1.5"
   }
+  
 }
