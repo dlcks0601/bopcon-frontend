@@ -17,7 +17,7 @@ interface SearchResult {
   genre: string;
 }
 
-const BASE_URL = "http://bopcon-env-1.eba-t4zkjfm2.ap-northeast-2.elasticbeanstalk.com/api/:path*";
+const BASE_URL = "http://bopcon-env-1.eba-t4zkjfm2.ap-northeast-2.elasticbeanstalk.com";
 
 // 검색 API 호출 함수
 export const fetchSearchResults = async (
