@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",  
+      "destination": "http://bopcon-env-1.eba-t4zkjfm2.ap-northeast-2.elasticbeanstalk.com/api/:path*"  
+    }
+  ]
+}
