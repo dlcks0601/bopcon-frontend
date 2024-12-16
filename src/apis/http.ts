@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getToken, logout, removeToken } from '../store/slices/authSlice';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://bopcon-env-1.eba-t4zkjfm2.ap-northeast-2.elasticbeanstalk.com';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.bopcon.site';
 const DEFAULT_TIMEOUT = 30000;
 
 const refreshAccessToken = async (

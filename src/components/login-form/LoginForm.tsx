@@ -26,7 +26,7 @@ const LoginForm = () => {
   } = useForm<LoginFormValues>();
 
   const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || 'http://bopcon-env-1.eba-t4zkjfm2.ap-northeast-2.elasticbeanstalk.com';
+    import.meta.env.VITE_API_BASE_URL || 'https://api.bopcon.site';
 
   useEffect(() => {
     if (isLoggedIn) {
