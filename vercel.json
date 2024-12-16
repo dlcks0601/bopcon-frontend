@@ -5,7 +5,7 @@
       "destination": "https://api.bopcon.site/api/:path*"
     },
     {
-      "source": "/admin",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
