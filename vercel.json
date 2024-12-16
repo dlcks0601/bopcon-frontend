@@ -1,8 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",  
-      "destination": "https://api.bopcon.site/api/:path*"  
+      "source": "/api/:path*",
+      "destination": "https://api.bopcon.site/api/:path*"
+    },
+    {
+      "source": "/admin",
+      "destination": "/index.html"
     }
   ]
 }
