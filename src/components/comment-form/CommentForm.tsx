@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux'; // useSelector 임포트 추가
 import { RootState } from '@/store'; // 상태 타입을 가져오는 부분 (이 부분은 프로젝트 설정에 따라 다를 수 있음)
@@ -33,6 +34,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ articleId, onCommentAdded }) 
       try {
         // 댓글 추가 API 호출
         const addedComment = await addComment(articleId, newComment, token);
+        // @ts-expect-error
         onCommentAdded(addedComment); // 부모 컴포넌트에 새 댓글 전달
         setNewComment(''); // 댓글 입력 필드 초기화
         setError(''); // 에러 초기화

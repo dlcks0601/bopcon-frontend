@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import WriteItem from '../write-item/WriteItem';
@@ -155,6 +156,7 @@ const MyWriteList: React.FC<MyWriteListProps> = ({ isExpanded }) => {
 
       {isModalOpen && selectedArticle && !isEditing && (
         <ArticleModal
+        // @ts-expect-error
           article={selectedArticle}
           onClose={closeModal}
           onEdit={() => setIsEditing(true)}

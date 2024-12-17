@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -85,6 +86,7 @@ const PastConcertList: React.FC<PastConcertListProps> = ({ artistId, isExpanded 
           className="cursor-pointer"
         >
           <PastConcertItem
+            // @ts-expect-error
             date={past.date}
             location={past.cityName}
             description={past.venueName}

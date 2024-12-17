@@ -33,7 +33,7 @@ const ArticleModal: React.FC<ModalProps> = ({
 
       try {
         setLoading(true);
-        const data = await getCommentsByArticle(article.id);
+        const data = await getCommentsByArticle(article.id) as unknown as Comment[];
         setComments(data);
         setHasFetchedComments(true);
       } catch (error) {

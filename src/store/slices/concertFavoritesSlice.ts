@@ -6,7 +6,7 @@ interface Favorite {
   concertId: number | null;
 }
 
-interface ConcertFavoritesState {
+export interface ConcertFavoritesState {
   concertFavorites: Favorite[];
   loading: boolean;
   error: string | null;

@@ -16,12 +16,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // 백엔드 서버 주소
+        target: 'https://api.bopcon.site', // 백엔드 서버 주소
         changeOrigin: true,
         secure: false,
       },
       '/auth': {
-        target: 'http://localhost:8080', // 추가로 다른 API 경로를 백엔드로 전달
+        target: 'https://api.bopcon.site', // 추가로 다른 API 경로를 백엔드로 전달
         changeOrigin: true,
         secure: false,
       },

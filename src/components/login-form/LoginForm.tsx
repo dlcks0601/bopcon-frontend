@@ -26,14 +26,14 @@ const LoginForm = () => {
   } = useForm<LoginFormValues>();
 
   const API_BASE_URL =
-    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+    import.meta.env.VITE_API_BASE_URL || 'https://api.bopcon.site';
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate('/');
     }
   }, [isLoggedIn, navigate]);
-
+         
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleLogin = async (data: LoginFormValues) => {
@@ -115,9 +115,9 @@ const LoginForm = () => {
               type='email'
               {...register('email', { required: '이메일을 입력하세요.' })}
             />
-            {errors.email && (
-              <p className='text-red-500 text-sm'>{errors.email.message}</p>
-            )}
+            {!isLoading && errors.email && (
+  <p className='text-red-500 text-sm'>{errors.email.message}</p>
+)}
           </div>
           <div className='w-full mb-12'>
             <GlobalInput

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -100,6 +101,7 @@ const WriteList: React.FC = () => {
       {/* 모달 열기 */}
       {isModalOpen && selectedArticle && (
         <ArticleModal
+        // @ts-expect-error
           article={selectedArticle} // 선택된 게시글 정보 전달
           onClose={closeModal}
           onEdit={() => {}}

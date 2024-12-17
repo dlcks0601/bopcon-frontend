@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ArtistTab from "../../components/admin/ArtistTab";
 import ConcertTab from "../../components/admin/ConcertTab";
 

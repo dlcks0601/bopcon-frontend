@@ -7,10 +7,13 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    "noEmit": false,
+    "declaration": true,
+    "outDir": "./dist/app",
+    "composite": true,
+    
 
     /* Linting */
     "strict": true,

@@ -17,7 +17,7 @@ interface SearchResult {
   genre: string;
 }
 
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = "https://api.bopcon.site/api";
 
 // 검색 API 호출 함수
 export const fetchSearchResults = async (
