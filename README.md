@@ -8,7 +8,6 @@
 -   Tailwind CSS (CSS)
 -   React (SPA)
 -   Vite (Bundler)
--   React-query (Server State Management)
 
 ### 📂 Structure
 
